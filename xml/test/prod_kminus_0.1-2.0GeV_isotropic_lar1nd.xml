@@ -3,7 +3,7 @@
 <!-- Production Project -->
 
 <!DOCTYPE project [
-<!ENTITY release "v03_04_01">
+<!ENTITY release "v00_07_00">
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
 <!ENTITY name "prod_kminus_0.1-2.0GeV_isotropic_lar1nd">
