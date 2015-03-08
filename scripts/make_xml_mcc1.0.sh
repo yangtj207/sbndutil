@@ -1,9 +1,9 @@
 #! /bin/bash
 #----------------------------------------------------------------------
 #
-# Name: make_xml_mcc5.0.sh
+# Name: make_xml_mcc6.0.sh
 #
-# Purpose: Make xml files for mcc 5.0.  This script loops over all
+# Purpose: Make xml files for mcc 6.0.  This script loops over all
 #          generator-level fcl files in the source area of the currently 
 #          setup version of lar1ndcode (that is, under 
 #          $UBOONECODE_DIR/source/fcl/gen), and makes a corresponding xml
@@ -11,7 +11,7 @@
 #
 # Usage:
 #
-# make_xml_mcc5.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]
+# make_xml_mcc6.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]
 #
 # Options:
 #
@@ -30,7 +30,7 @@
 
 # Parse arguments.
 
-rel=v02_05_01
+rel=v00_07_00
 userdir=lar1ndpro
 userbase=$userdir
 nevarg=0
@@ -44,7 +44,7 @@ while [ $# -gt 0 ]; do
     # User directory.
 
     -h|--help )
-      echo "Usage: make_xml_mcc5.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
+      echo "Usage: make_xml_mcc6.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
       exit
     ;;
 
@@ -109,15 +109,13 @@ done
 
 # Get qualifier.
 
-qual=e5
-ver=`echo $rel | cut -c2-3`
-if [ $ver -gt 2 ]; then
-  qual=e6
-fi
+qual=e6
 
 # Delete existing xml files.
 
 rm -f *.xml
+
+# Loop over existing generator fcl files.
 
 find $UBOONECODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
 do
@@ -137,6 +135,9 @@ do
     # G4
 
     g4fcl=standard_g4_lar1nd.fcl
+    if echo $newprj | grep -q dirt; then
+      g4fcl=standard_g4_dirt_lar1nd.fcl
+    fi
 
     # Detsim (optical + tpc).
 
@@ -215,19 +216,16 @@ do
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
 <!ENTITY name "$newprj">
-<!ENTITY tag "mcc5.0">
+<!ENTITY tag "mcc6.0">
 ]>
 
 <project name="&name;">
-
-  <!-- Group -->
-  <group>lar1nd</group>
 
   <!-- Project size -->
   <numevents>$nev</numevents>
 
   <!-- Operating System -->
-  <os>SL5,SL6</os>
+  <os>SL6</os>
 
   <!-- Batch resources -->
   <resource>DEDICATED,OPPORTUNISTIC</resource>
@@ -237,8 +235,8 @@ do
     <tag>&release;</tag>
     <qual>${qual}:prof</qual>
 EOF
-  echo "local=$local"
   if [ x$local != x ]; then
+    echo "local=$local"
     echo "    <local>${local}</local>" >> $newxml
   fi
   cat <<EOF >> $newxml
