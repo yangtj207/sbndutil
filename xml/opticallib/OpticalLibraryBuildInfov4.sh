@@ -30,13 +30,13 @@ cluster=${CLUSTER}
 # Library building parameters
 
 # In each grid job, do this many voxels:
-NVoxelsPerJob=320
+NVoxelsPerJob=512
 
 
 # In each voxel, run this many photons:
 NPhotonsPerVoxel=100000
 
-NTopVoxel=320001
+NTopVoxel=2560001
 echo $FHICL_FILE_PATH "fhicl file path"
 # This works out which voxels this job should focus on: 
 FirstVoxel=`echo "($NVoxelsPerJob * $PROCESS ) % $NTopVoxel" | bc`
