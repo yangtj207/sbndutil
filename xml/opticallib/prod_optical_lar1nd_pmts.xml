@@ -3,7 +3,7 @@
 <!-- Production Project -->
 
 <!DOCTYPE project [
-<!ENTITY release "v04_00_00">
+<!ENTITY release "v04_08_00">
 <!ENTITY file_type "mc">
 <!ENTITY run_type "physics">
 <!ENTITY name "build_optical_lib_dir">
@@ -28,7 +28,7 @@
   <!-- Larsoft information -->
   <larsoft>
     <tag>&release;</tag>
-    <qual>e6:prof</qual>
+    <qual>e7:prof</qual>
     <local>/lar1nd/app/users/andrzejs/another_test_v03_08_02/lar1nd_opdet.tar</local>
   </larsoft>
 
