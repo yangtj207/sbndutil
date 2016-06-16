@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version should be of the form vxx_yy_zz (e.g. v01_02_03)
-parent lar1ndutil v01_14_00
+parent sbndutil v01_14_00
 defaultqual e9
 
 # These optional lines define the installed directories where headers,
@@ -30,10 +30,10 @@ bindir  product_dir    bin
 
 # table fragment to set various environment variables.
 table_fragment_begin
-    #envSet(GROUP, lar1nd)
-    envSet(JOBSUB_GROUP, lar1nd)
-    envSet(EXPERIMENT, lar1nd)
-    envSet(SAM_EXPERIMENT, lar1nd)
+    #envSet(GROUP, sbnd)
+    envSet(JOBSUB_GROUP, sbnd)
+    envSet(EXPERIMENT, sbnd)
+    envSet(SAM_EXPERIMENT, sbnd)
     pathPrepend(PYTHONPATH, ${UPS_PROD_DIR}/python)
 table_fragment_end
 

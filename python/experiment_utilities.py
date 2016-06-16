@@ -24,7 +24,7 @@ def get_dropbox(filename):
     # Get metadata.
 
     md = {}
-    exp = 'lar1nd'
+    exp = 'sbnd'
     if os.environ.has_key('SAM_EXPERIMENT'):
         exp = os.environ['SAM_EXPERIMENT']
     samweb = samweb_cli.SAMWebClient(experiment=exp)
@@ -51,13 +51,13 @@ def get_dropbox(filename):
 
     # Construct dropbox path.
 
-    path = '/lar1nd/data/lar1ndsoft/dropbox/%s/%s/%s' % (file_type, group, data_tier)
+    path = '/sbnd/data/sbndsoft/dropbox/%s/%s/%s' % (file_type, group, data_tier)
     return path
 
 # Return fcl configuration for experiment-specific sam metadata.
 
 def get_sam_metadata(project, stage):
-    result = 'services.user.FileCatalogMetadataLAr1ND: {\n'
+    result = 'services.user.FileCatalogMetadataSBND: {\n'
     result = result + '  FCLName: "%s"\n' % os.path.basename(stage.fclname)
     result = result + '  FCLVersion: "%s"\n' % project.release_tag
     result = result + '  ProjectName: "%s"\n' % project.name
@@ -66,17 +66,17 @@ def get_sam_metadata(project, stage):
     result = result + '}\n'
     return result
 
-# Function to return path to the setup_lar1nd.sh script
+# Function to return path to the setup_sbnd.sh script
 
 def get_setup_script_path():
 
-    OASIS_DIR="/cvmfs/oasis.opensciencegrid.org/lar1nd/products/"
-    FERMIAPP_DIR="/grid/fermiapp/products/lar1nd/"
+    OASIS_DIR="/cvmfs/oasis.opensciencegrid.org/sbnd/products/"
+    FERMIAPP_DIR="/grid/fermiapp/products/sbnd/"
 
-    if os.path.isfile(FERMIAPP_DIR+"setup_lar1nd.sh"):
-        setup_script = FERMIAPP_DIR+"setup_lar1nd.sh"
-    elif os.path.isfile(OASIS_DIR+"setup_lar1nd.sh"):
-        setup_script = OASIS_DIR+"setup_lar1nd.sh"
+    if os.path.isfile(FERMIAPP_DIR+"setup_sbnd.sh"):
+        setup_script = FERMIAPP_DIR+"setup_sbnd.sh"
+    elif os.path.isfile(OASIS_DIR+"setup_sbnd.sh"):
+        setup_script = OASIS_DIR+"setup_sbnd.sh"
     else:
         raise RuntimeError, "Could not find setup script at "+FERMIAPP_DIR+" or "+OASIS_DIR
 
@@ -95,5 +95,5 @@ def dimensions(project, stage):
     return dim
 
 def get_ups_products():
-    return 'lar1ndcode'
+    return 'sbndcode'
 

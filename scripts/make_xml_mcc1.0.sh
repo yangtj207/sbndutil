@@ -5,7 +5,7 @@
 #
 # Purpose: Make xml files for mcc 6.0.  This script loops over all
 #          generator-level fcl files in the source area of the currently 
-#          setup version of lar1ndcode (that is, under 
+#          setup version of sbndcode (that is, under 
 #          $UBOONECODE_DIR/source/fcl/gen), and makes a corresponding xml
 #          project file in the local directory.
 #
@@ -16,9 +16,9 @@
 # Options:
 #
 # -h|--help     - Print help.
-# -r <release>  - Use the specified larsoft/lar1ndcode release.
+# -r <release>  - Use the specified larsoft/sbndcode release.
 # -u|--user <user> - Use users/<user> as working and output directories
-#                    (default is to use lar1ndpro).
+#                    (default is to use sbndpro).
 # --local <dir|tar> - Specify larsoft local directory or tarball (xml 
 #                     tag <local>...</local>).
 # --nev <n>     - Specify number of events for all samples.  Otherwise
@@ -31,7 +31,7 @@
 # Parse arguments.
 
 rel=v00_07_00
-userdir=lar1ndpro
+userdir=sbndpro
 userbase=$userdir
 nevarg=0
 nevjob=100
@@ -134,16 +134,16 @@ do
 
     # G4
 
-    g4fcl=standard_g4_lar1nd.fcl
+    g4fcl=standard_g4_sbnd.fcl
     if echo $newprj | grep -q dirt; then
-      g4fcl=standard_g4_dirt_lar1nd.fcl
+      g4fcl=standard_g4_dirt_sbnd.fcl
     fi
 
     # Detsim (optical + tpc).
 
-    detsimfcl=standard_detsim_lar1nd.fcl
+    detsimfcl=standard_detsim_sbnd.fcl
     if echo $newprj | grep -q dirt; then
-      detsimfcl=standard_detsim_lar1nd_tpcfilt.fcl
+      detsimfcl=standard_detsim_sbnd_tpcfilt.fcl
       if echo $newprj | grep -q bnb; then
         filt=5
       else
@@ -153,15 +153,15 @@ do
 
     # Reco 2D
 
-    reco2dfcl=standard_reco_lar1nd_2D.fcl
+    reco2dfcl=standard_reco_sbnd_2D.fcl
 
     # Reco 3D
 
-    reco3dfcl=standard_reco_lar1nd_3D.fcl
+    reco3dfcl=standard_reco_sbnd_3D.fcl
 
     # Merge/Analysis
 
-    mergefcl=standard_ana_lar1nd.fcl
+    mergefcl=standard_ana_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
@@ -182,15 +182,15 @@ do
 
     nev=$nevarg
     if [ $nev -eq 0 ]; then
-      if [ $newprj = prodgenie_bnb_nu_cosmic_lar1nd ]; then
+      if [ $newprj = prodgenie_bnb_nu_cosmic_sbnd ]; then
         nev=50000
-      elif [ $newprj = prodgenie_bnb_nu_lar1nd ]; then
+      elif [ $newprj = prodgenie_bnb_nu_sbnd ]; then
         nev=20000
-      elif [ $newprj = prodgenie_bnb_nue_cosmic_lar1nd ]; then
+      elif [ $newprj = prodgenie_bnb_nue_cosmic_sbnd ]; then
         nev=20000
-      elif [ $newprj = prodgenie_bnb_nue_lar1nd ]; then
+      elif [ $newprj = prodgenie_bnb_nue_sbnd ]; then
         nev=20000
-      elif [ $newprj = prodcosmics_lar1nd ]; then
+      elif [ $newprj = prodcosmics_sbnd ]; then
         nev=20000
       else
         nev=10000
@@ -246,8 +246,8 @@ EOF
 
   <stage name="gen">
     <fcl>$genfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/gen/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/gen/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/gen/&name;</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>generated</datatier>
     <defname>&name;_&tag;_gen</defname>
@@ -255,8 +255,8 @@ EOF
 
   <stage name="g4">
     <fcl>$g4fcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/g4/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/g4/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/g4/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/g4/&name;</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>simulated</datatier>
     <defname>&name;_&tag;_g4</defname>
@@ -267,8 +267,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="detsim">
     <fcl>$detsimfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/detsim/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/detsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/detsim/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/detsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>detector-simulated</datatier>
     <defname>&name;_&tag;_detsim</defname>
@@ -280,8 +280,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="optsim">
     <fcl>$optsimfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/optsim/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/optsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/optsim/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/optsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>optical-simulated</datatier>
     <defname>&name;_&tag;_optsim</defname>
@@ -293,8 +293,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="tpcsim">
     <fcl>$tpcsimfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/tpcsim/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/tpcsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/tpcsim/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/tpcsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>tpc-simulated</datatier>
     <defname>&name;_&tag;_tpcsim</defname>
@@ -305,8 +305,8 @@ EOF
   cat <<EOF >> $newxml
   <stage name="reco2D">
     <fcl>$reco2dfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/reco2D/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/reco2D/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/reco2D/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/reco2D/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed-2d</datatier>
     <defname>&name;_&tag;_reco2D</defname>
@@ -314,8 +314,8 @@ EOF
 
   <stage name="reco3D">
     <fcl>$reco3dfcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/reco3D/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/reco3D/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/reco3D/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/reco3D/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed-3d</datatier>
     <defname>&name;_&tag;_reco3D</defname>
@@ -323,8 +323,8 @@ EOF
 
   <stage name="mergeana">
     <fcl>$mergefcl</fcl>
-    <outdir>/pnfs/lar1nd/scratch/${userdir}/&release;/mergeana/&name;</outdir>
-    <workdir>/lar1nd/app/users/${userbase}/&release;/mergeana/&name;</workdir>
+    <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/mergeana/&name;</outdir>
+    <workdir>/sbnd/app/users/${userbase}/&release;/mergeana/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <targetsize>8000000000</targetsize>
     <datatier>reconstructed-3d</datatier>
