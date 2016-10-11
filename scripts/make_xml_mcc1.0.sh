@@ -6,7 +6,7 @@
 # Purpose: Make xml files for mcc 6.0.  This script loops over all
 #          generator-level fcl files in the source area of the currently 
 #          setup version of sbndcode (that is, under 
-#          $UBOONECODE_DIR/source/fcl/gen), and makes a corresponding xml
+#          $SBNDCODE_DIR/source/fcl/gen), and makes a corresponding xml
 #          project file in the local directory.
 #
 # Usage:
@@ -109,7 +109,7 @@ done
 
 # Get qualifier.
 
-qual=e6
+qual=e9
 
 # Delete existing xml files.
 
@@ -117,7 +117,7 @@ rm -f *.xml
 
 # Loop over existing generator fcl files.
 
-find $UBOONECODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
+find $SBNDCODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
 do
   if ! echo $fcl | grep -q common; then
     newprj=`basename $fcl .fcl`
