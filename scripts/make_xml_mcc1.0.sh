@@ -32,6 +32,7 @@
 
 rel=v00_07_00
 userdir=sbndpro
+qual=e9:prof
 userbase=$userdir
 nevarg=0
 nevjob=100
@@ -44,7 +45,7 @@ while [ $# -gt 0 ]; do
     # User directory.
 
     -h|--help )
-      echo "Usage: make_xml_mcc6.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
+      echo "Usage: make_xml_mcc6.0.sh [-h|--help] [-r <release>] [-q <qual>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
       exit
     ;;
 
@@ -56,6 +57,16 @@ while [ $# -gt 0 ]; do
       shift
     fi
     ;;
+
+    # Qualifier.
+
+    -q)
+    if [ $# -gt 1 ]; then
+      qual=$2
+      shift
+    fi
+    ;;
+
 
     # User.
 
@@ -109,7 +120,7 @@ done
 
 # Get qualifier.
 
-qual=e9
+#qual=e9
 
 # Delete existing xml files.
 
@@ -233,7 +244,7 @@ do
   <!-- Larsoft information -->
   <larsoft>
     <tag>&release;</tag>
-    <qual>${qual}:prof</qual>
+    <qual>${qual}</qual>
 EOF
   if [ x$local != x ]; then
     echo "local=$local"
@@ -247,7 +258,7 @@ EOF
   <stage name="gen">
     <fcl>$genfcl</fcl>
     <outdir>/pnfs/sbnd/scratch/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/gen/&name;</workdir>
+    <workdir>/pnfs/sbnd/scratch/${userbase}/&release;/work/gen/&name;</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>generated</datatier>
     <defname>&name;_&tag;_gen</defname>
