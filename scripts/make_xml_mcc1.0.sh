@@ -31,7 +31,7 @@
 # Parse arguments.
 
 rel=v00_07_00
-userdir=sbndpro
+userdir=users/sbndpro
 qual=e9:prof
 userbase=$userdir
 nevarg=0
@@ -258,7 +258,7 @@ EOF
   <stage name="gen">
     <fcl>$genfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userbase}/&release;/work/gen/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/gen/&name;</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>generated</datatier>
     <defname>&name;_&tag;_gen</defname>
@@ -267,7 +267,7 @@ EOF
   <stage name="g4">
     <fcl>$g4fcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/g4/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/g4/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/g4/&name;</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>simulated</datatier>
     <defname>&name;_&tag;_g4</defname>
@@ -279,7 +279,7 @@ EOF
   <stage name="detsim">
     <fcl>$detsimfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/detsim/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/detsim/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/detsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>detector-simulated</datatier>
     <defname>&name;_&tag;_detsim</defname>
@@ -292,7 +292,7 @@ EOF
   <stage name="optsim">
     <fcl>$optsimfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/optsim/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>optical-simulated</datatier>
     <defname>&name;_&tag;_optsim</defname>
@@ -305,7 +305,7 @@ EOF
   <stage name="tpcsim">
     <fcl>$tpcsimfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/tpcsim/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>tpc-simulated</datatier>
     <defname>&name;_&tag;_tpcsim</defname>
@@ -317,7 +317,7 @@ EOF
   <stage name="reco2D">
     <fcl>$reco2dfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/reco2D/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed-2d</datatier>
     <defname>&name;_&tag;_reco2D</defname>
@@ -326,7 +326,7 @@ EOF
   <stage name="reco3D">
     <fcl>$reco3dfcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/reco3D/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed-3d</datatier>
     <defname>&name;_&tag;_reco3D</defname>
@@ -335,7 +335,7 @@ EOF
   <stage name="mergeana">
     <fcl>$mergefcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</outdir>
-    <workdir>/sbnd/app/users/${userbase}/&release;/mergeana/&name;</workdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <targetsize>8000000000</targetsize>
     <datatier>reconstructed-3d</datatier>
