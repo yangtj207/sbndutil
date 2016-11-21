@@ -312,11 +312,11 @@ EOF
   cat <<EOF >> $newxml
   <stage name="reco">
     <fcl>$recofcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco/&name;</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco/&name;</workdir>
     <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-2d</datatier>
-    <defname>&name;_&tag;_reco2D</defname>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_&tag;_reco</defname>
   </stage>
 
   <stage name="mergeana">
@@ -325,7 +325,7 @@ EOF
     <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <targetsize>8000000000</targetsize>
-    <datatier>reconstructed-3d</datatier>
+    <datatier>reconstructed</datatier>
     <defname>&name;_&tag;</defname>
   </stage>
 
