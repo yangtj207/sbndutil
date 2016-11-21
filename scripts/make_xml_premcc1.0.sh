@@ -162,17 +162,13 @@ do
       fi
     fi
 
-    # Reco 2D
+    # Reco
 
-    reco2dfcl=standard_reco_sbnd_2D.fcl
-
-    # Reco 3D
-
-    reco3dfcl=standard_reco_sbnd_3D.fcl
+    recofcl=standard_reco_sbnd_basic.fcl
 
     # Merge/Analysis
 
-    mergefcl=standard_ana_sbnd.fcl
+    mergefcl=anatree_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
@@ -314,22 +310,13 @@ EOF
 EOF
   fi
   cat <<EOF >> $newxml
-  <stage name="reco2D">
-    <fcl>$reco2dfcl</fcl>
+  <stage name="reco">
+    <fcl>$recofcl</fcl>
     <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</outdir>
     <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed-2d</datatier>
     <defname>&name;_&tag;_reco2D</defname>
-  </stage>
-
-  <stage name="reco3D">
-    <fcl>$reco3dfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-3d</datatier>
-    <defname>&name;_&tag;_reco3D</defname>
   </stage>
 
   <stage name="mergeana">
