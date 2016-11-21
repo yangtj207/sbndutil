@@ -168,7 +168,7 @@ do
 
     # Merge/Analysis
 
-    mergefcl=anatree_sbnd.fcl
+    mergefcl=standard_anatree_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
