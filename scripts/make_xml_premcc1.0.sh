@@ -253,8 +253,8 @@ EOF
 
   <stage name="gen">
     <fcl>$genfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/gen/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/gen</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/gen</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>generated</datatier>
     <defname>&name;_&tag;_gen</defname>
@@ -262,8 +262,8 @@ EOF
 
   <stage name="g4">
     <fcl>$g4fcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/g4/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/g4/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/g4</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/g4</workdir>
     <numjobs>$njob1</numjobs>
     <datatier>simulated</datatier>
     <defname>&name;_&tag;_g4</defname>
@@ -274,8 +274,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="detsim">
     <fcl>$detsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/detsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/detsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/detsim</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/detsim</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>detector-simulated</datatier>
     <defname>&name;_&tag;_detsim</defname>
@@ -287,8 +287,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="optsim">
     <fcl>$optsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/optsim</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/optsim</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>optical-simulated</datatier>
     <defname>&name;_&tag;_optsim</defname>
@@ -300,8 +300,8 @@ EOF
     cat <<EOF >> $newxml
   <stage name="tpcsim">
     <fcl>$tpcsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/tpcsim</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/tpcsim</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>tpc-simulated</datatier>
     <defname>&name;_&tag;_tpcsim</defname>
@@ -312,17 +312,17 @@ EOF
   cat <<EOF >> $newxml
   <stage name="reco">
     <fcl>$recofcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/reco</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/reco</workdir>
     <numjobs>$njob2</numjobs>
     <datatier>reconstructed</datatier>
     <defname>&name;_&tag;_reco</defname>
   </stage>
 
-  <stage name="mergeana">
+  <stage name="anatree">
     <fcl>$mergefcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</workdir>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/anatree</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/anatree</workdir>
     <numjobs>$njob2</numjobs>
     <targetsize>8000000000</targetsize>
     <datatier>reconstructed</datatier>
