@@ -30,7 +30,7 @@
 
 function print_xml_to_file {
 
-  echo "Making ${newprj}.xml"
+  echo "Making ${newxml}"
 
   cat <<EOF > $newxml
   <?xml version="1.0"?>
@@ -362,6 +362,7 @@ do
     if [ "$makedefaultsample"=true ] ; then
 
       newprj=`basename $fcl .fcl` #reset the newprj back to the default project
+      newxml=${newprj}.xml
       set_default_fcl
       print_xml_to_file
     fi
