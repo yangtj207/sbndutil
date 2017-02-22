@@ -28,7 +28,103 @@
 #
 #----------------------------------------------------------------------
 
-# Parse arguments.
+function print_xml_to_file {
+   cat <<EOF > $newxml
+  <?xml version="1.0"?>
+  
+  <!-- Production Project -->
+  
+  <!DOCTYPE project [
+  <!ENTITY release "$rel">
+  <!ENTITY file_type "mc">
+  <!ENTITY run_type "physics">
+  <!ENTITY name "$newprj">
+  <!ENTITY tag "mcc1.0">
+  ]>
+  
+  <project name="&name;">
+  
+    <!-- Project size -->
+    <numevents>$nev</numevents>
+  
+    <!-- Operating System -->
+    <os>SL6</os>
+  
+    <!-- Batch resources -->
+    <resource>DEDICATED,OPPORTUNISTIC</resource>
+  
+    <!-- Larsoft information -->
+    <larsoft>
+      <tag>&release;</tag>
+      <qual>${qual}</qual>
+EOF
+    if [ x$local != x ]; then
+      echo "local=$local"
+      echo "    <local>${local}</local>" >> $newxml
+    fi
+cat <<EOF >> $newxml
+    </larsoft>
+  
+    <!-- Project stages -->
+  
+    <stage name="gen">
+      <fcl>$genfcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/gen</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/gen</workdir>
+      <numjobs>$njob1</numjobs>
+      <datatier>generated</datatier>
+      <defname>&name;_&tag;_gen</defname>
+    </stage>
+  
+    <stage name="g4">
+      <fcl>$g4fcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/g4</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/g4</workdir>
+      <numjobs>$njob1</numjobs>
+      <datatier>simulated</datatier>
+      <defname>&name;_&tag;_g4</defname>
+    </stage>
+  
+    <stage name="detsim">
+      <fcl>$detsimfcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/detsim</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/detsim</workdir>
+      <numjobs>$njob2</numjobs>
+      <datatier>detector-simulated</datatier>
+      <defname>&name;_&tag;_detsim</defname>
+    </stage>
+  
+    <stage name="reco">
+      <fcl>$recofcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/reco</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/reco</workdir>
+      <numjobs>$njob2</numjobs>
+      <datatier>reconstructed</datatier>
+      <defname>&name;_&tag;_reco</defname>
+    </stage>
+  
+    <stage name="anatree">
+      <fcl>$anatreefcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/anatree</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/anatree</workdir>
+      <numjobs>$njob2</numjobs>
+      <targetsize>8000000000</targetsize>
+      <datatier>reconstructed</datatier>
+      <defname>&name;_&tag;</defname>
+    </stage>
+  
+    <!-- file type -->
+    <filetype>&file_type;</filetype>
+  
+    <!-- run type -->
+    <runtype>&run_type;</runtype>
+  
+  </project>
+EOF
+}
+
+
+#Parse arguments.
 
 rel=v00_07_00
 userdir=users/sbndpro
@@ -128,7 +224,7 @@ rm -f *.xml
 
 # Loop over existing generator fcl files.
 
-find $SBNDCODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
+find $SBNDCODE_DIR/fcl/gen -name \*.fcl | while read fcl
 do
   if ! echo $fcl | grep -q common; then
     newprj=`basename $fcl .fcl`
@@ -144,35 +240,16 @@ do
     genfcl=`basename $fcl`
 
     # G4
-
     g4fcl=standard_g4_sbnd.fcl
-    if echo $newprj | grep -q dirt; then
-      g4fcl=standard_g4_dirt_sbnd.fcl
-    fi
 
     # Detsim (optical + tpc).
-
     detsimfcl=standard_detsim_sbnd.fcl
-    if echo $newprj | grep -q dirt; then
-      detsimfcl=standard_detsim_sbnd_tpcfilt.fcl
-      if echo $newprj | grep -q bnb; then
-        filt=5
-      else
-        filt=20
-      fi
-    fi
 
-    # Reco 2D
+    # Reco 
+    recofcl=standard_reco_sbnd_2D.fcl
 
-    reco2dfcl=standard_reco_sbnd_2D.fcl
-
-    # Reco 3D
-
-    reco3dfcl=standard_reco_sbnd_3D.fcl
-
-    # Merge/Analysis
-
-    mergefcl=standard_ana_sbnd.fcl
+    # Anatree 
+    anatreefcl=standard_ana_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
@@ -217,139 +294,8 @@ do
       njob1=$njob2
     fi
 
-  cat <<EOF > $newxml
-<?xml version="1.0"?>
-
-<!-- Production Project -->
-
-<!DOCTYPE project [
-<!ENTITY release "$rel">
-<!ENTITY file_type "mc">
-<!ENTITY run_type "physics">
-<!ENTITY name "$newprj">
-<!ENTITY tag "mcc1.0">
-]>
-
-<project name="&name;">
-
-  <!-- Project size -->
-  <numevents>$nev</numevents>
-
-  <!-- Operating System -->
-  <os>SL6</os>
-
-  <!-- Batch resources -->
-  <resource>DEDICATED,OPPORTUNISTIC</resource>
-
-  <!-- Larsoft information -->
-  <larsoft>
-    <tag>&release;</tag>
-    <qual>${qual}</qual>
-EOF
-  if [ x$local != x ]; then
-    echo "local=$local"
-    echo "    <local>${local}</local>" >> $newxml
-  fi
-  cat <<EOF >> $newxml
-  </larsoft>
-
-  <!-- Project stages -->
-
-  <stage name="gen">
-    <fcl>$genfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/gen/&name;</workdir>
-    <numjobs>$njob1</numjobs>
-    <datatier>generated</datatier>
-    <defname>&name;_&tag;_gen</defname>
-  </stage>
-
-  <stage name="g4">
-    <fcl>$g4fcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/g4/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/g4/&name;</workdir>
-    <numjobs>$njob1</numjobs>
-    <datatier>simulated</datatier>
-    <defname>&name;_&tag;_g4</defname>
-  </stage>
-
-EOF
-  if [ x$detsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="detsim">
-    <fcl>$detsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/detsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/detsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>detector-simulated</datatier>
-    <defname>&name;_&tag;_detsim</defname>
-  </stage>
-
-EOF
-  fi
-  if [ x$optsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="optsim">
-    <fcl>$optsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>optical-simulated</datatier>
-    <defname>&name;_&tag;_optsim</defname>
-  </stage>
-
-EOF
-  fi
-  if [ x$tpcsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="tpcsim">
-    <fcl>$tpcsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>tpc-simulated</datatier>
-    <defname>&name;_&tag;_tpcsim</defname>
-  </stage>
-
-EOF
-  fi
-  cat <<EOF >> $newxml
-  <stage name="reco2D">
-    <fcl>$reco2dfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-2d</datatier>
-    <defname>&name;_&tag;_reco2D</defname>
-  </stage>
-
-  <stage name="reco3D">
-    <fcl>$reco3dfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-3d</datatier>
-    <defname>&name;_&tag;_reco3D</defname>
-  </stage>
-
-  <stage name="mergeana">
-    <fcl>$mergefcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <targetsize>8000000000</targetsize>
-    <datatier>reconstructed-3d</datatier>
-    <defname>&name;_&tag;</defname>
-  </stage>
-
-  <!-- file type -->
-  <filetype>&file_type;</filetype>
-
-  <!-- run type -->
-  <runtype>&run_type;</runtype>
-
-</project>
-EOF
+  #make XML here
+  print_xml_to_file
 
   fi
 
