@@ -360,6 +360,8 @@ do
     done
     #if we still want to make the default file then make the XML
     if [ "$makedefaultsample"=true ] ; then
+
+      newprj=`basename $fcl .fcl` #reset the newprj back to the default project
       set_default_fcl
       print_xml_to_file
     fi
