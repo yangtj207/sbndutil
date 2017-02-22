@@ -29,7 +29,10 @@
 #----------------------------------------------------------------------
 
 function print_xml_to_file {
-   cat <<EOF > $newxml
+
+  echo "Making ${newprj}.xml"
+
+  cat <<EOF > $newxml
   <?xml version="1.0"?>
   
   <!-- Production Project -->
@@ -121,6 +124,20 @@ cat <<EOF >> $newxml
   
   </project>
 EOF
+}
+
+function set_default_fcl { 
+  # G4
+  g4fcl=standard_g4_sbnd.fcl
+
+  # Detsim (optical + tpc).
+  detsimfcl=standard_detsim_sbnd.fcl
+
+  # Reco 
+  recofcl=standard_reco_sbnd.fcl
+
+  # Anatree 
+  anatreefcl=standard_ana_sbnd.fcl
 }
 
 
@@ -233,23 +250,7 @@ do
 
     # Make xml file.
 
-    echo "Making ${newprj}.xml"
 
-    # Generator
-
-    genfcl=`basename $fcl`
-
-    # G4
-    g4fcl=standard_g4_sbnd.fcl
-
-    # Detsim (optical + tpc).
-    detsimfcl=standard_detsim_sbnd.fcl
-
-    # Reco 
-    recofcl=standard_reco_sbnd_2D.fcl
-
-    # Anatree 
-    anatreefcl=standard_ana_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
@@ -294,9 +295,75 @@ do
       njob1=$njob2
     fi
 
-  #make XML here
-  print_xml_to_file
 
+
+    # Define the generator-level fcl
+    genfcl=`basename $fcl`
+    #Assume that we are going to produce this sample with the default fcls
+    makedefaultsample=true
+    #Loop over the MCCSTATEMENTs in this fcl file to figure out what alternative samples need making
+    grep "MCCSTATEMENT" $fcl | 
+    {  #being the moron I am, I forgot that a while loop uses a subshell.  I want to maybe 
+       #change the value of makedefaultsample and check it outside of the loop.  So
+       #complete hack; wrap from here to the final makedefaultsample check in braces
+       #so it is all in the same subshell.  Basically not having the braces means that
+       #makedefaultsample will evaluate to true outside of this while loop
+    while read mccstatement
+    do
+      #At time of writing, the MCCSTATEMENT should define an altnerative set of fcl files to 
+      #process this particular sample through.  Technically each MCCSTATEMENT line is a 
+      #comma separated list of fcl files and a name for the alternative project.  The first element in the 
+      #comma separated list is a pair of statements separated by white space, the second of the pair is the 
+      #name of the project.  All subsequent elements in the list are also pairs separated by white space.
+      #The first element defines which stage to change the fcl file and can have the following names: G4:
+      #DETSIM: RECO: and ANATREE:.
+
+      #It is also possible that one of the statement lines asks us not to make the default sample path
+      #Check for this and set the flag to false if necessary
+      if echo $mccstatement | grep -q SKIPDEFAULT; then
+        makedefaultsample=false
+        #There shouldn't be anything else useful on this line so continue to the next statement
+        continue
+      fi
+
+      #For each new MCCSTATEMENT line we should initially reset the fcl files
+      set_default_fcl
+
+      #Delimit the MCCSTATEMENT line on the commas
+      IFS=','
+      statementarray=($mccstatement)
+      unset IFS
+      for statementelement in "${statementarray[@]}"
+      do
+        #The statementelement should be a string pair basically with a key and a value.  This time
+        #separated by whitespace
+        pair=($statementelement)
+        key=${pair[0]}
+        value=${pair[1]}
+        if echo $key | grep -q MCCSTATEMENT; then
+          newprj="${newprj}_${value}"
+          newxml=${newprj}.xml
+        elif echo $key | grep -q G4; then
+          g4fcl=$value
+        elif echo $key | grep -q DETSIM; then
+          detsimfcl=$value
+        elif echo $key | grep -q RECO; then
+          recofcl=$value
+        elif echo $key | grep -q ANATREE; then
+          anatreefcl=$value
+        else echo "ISSUE WITH MCCSTATEMENT IN $newprj.  CAN NOT FIND THE SET STATEMENTS (MCCSTATEMENT G4 DETSIM RECO OR ANATREE)"
+        fi
+      done
+      #make an XML file for each MCCSTATEMENT line
+      print_xml_to_file
+
+    done
+    #if we still want to make the default file then make the XML
+    if [ "$makedefaultsample"=true ] ; then
+      set_default_fcl
+      print_xml_to_file
+    fi
+    } #while loop subshell
   fi
 
 done
