@@ -328,6 +328,10 @@ do
 
       #For each new MCCSTATEMENT line we should initially reset the fcl files
       set_default_fcl
+      #Also reset the project name to that of the default sample as otherwise the new project names keep 
+      #getting appended to the previous new project name
+      newprj=`basename $fcl .fcl`
+      newxml=${newprj}.xml
 
       #Delimit the MCCSTATEMENT line on the commas
       IFS=','
