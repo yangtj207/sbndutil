@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v04_24_00">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "build_optical_lib_dir">
+<!ENTITY tag "mcc5.0">
+]>
+
+<project name="&name;">
+
+  <!-- Group -->
+  <group>sbnd</group>
+
+  <!-- Project size -->
+  <numevents>2560000</numevents>
+  <!--numevents>4860</numevents-->
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e7:prof</qual>
+    <local>/sbnd/app/users/andrzejs/another_test_v03_08_02/sbnd_opdet.tar</local>
+  </larsoft>
+
+  <!-- Project stages -->
+
+  <stage name="gen">
+    <fcl>/sbnd/app/users/andrzejs/another_test_v03_08_02/sbnd_buildopticallibrary_pmts.fcl</fcl>
+    <outdir>/pnfs/sbnd/scratch/users/andrzejs/&release;/gen/&name;</outdir>
+    <workdir>/sbnd/app/users/andrzejs/&release;/gen/&name;</workdir>
+    <initsource>/sbnd/app/users/andrzejs/another_test_v03_08_02/OpticalLibraryBuildInfov4.sh</initsource>
+    <numjobs>5000</numjobs>
+    <!--datatier>generated</datatier-->
+    <defname>&name;_&tag;_gen</defname>
+  </stage>
+
+  <!-- file type -->
+  <!--filetype>&file_type;</filetype-->
+
+  <!-- run type -->
+  <!--runtype>&run_type;</runtype-->
+
+</project>
