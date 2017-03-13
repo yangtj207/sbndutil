@@ -95,7 +95,7 @@
 
   <param_set name="configC-v1">
     <!-- Basically the same as configB but uses a HUGE flux window pressed up against the TPC front face -->
-    <using_param_set> configC-v1 </using_param_set>
+    <using_param_set> configB-v1 </using_param_set>
     <window>
       <point coord="det">  -38.7, -40,  0 </point>
       <point coord="det">  -38.7,  40,  0 </point>
