@@ -28,7 +28,120 @@
 #
 #----------------------------------------------------------------------
 
-# Parse arguments.
+function print_xml_to_file {
+
+  echo "Making ${newxml}"
+
+  cat <<EOF > $newxml
+  <?xml version="1.0"?>
+  
+  <!-- Production Project -->
+  
+  <!DOCTYPE project [
+  <!ENTITY release "$rel">
+  <!ENTITY file_type "mc">
+  <!ENTITY run_type "physics">
+  <!ENTITY name "$newprj">
+  <!ENTITY tag "mcc1.0">
+  ]>
+  
+  <project name="&name;">
+  
+    <!-- Project size -->
+    <numevents>$nev</numevents>
+  
+    <!-- Operating System -->
+    <os>SL6</os>
+  
+    <!-- Batch resources -->
+    <resource>DEDICATED,OPPORTUNISTIC</resource>
+  
+    <!-- Larsoft information -->
+    <larsoft>
+      <tag>&release;</tag>
+      <qual>${qual}</qual>
+EOF
+    if [ x$local != x ]; then
+      echo "local=$local"
+      echo "    <local>${local}</local>" >> $newxml
+    fi
+cat <<EOF >> $newxml
+    </larsoft>
+  
+    <!-- Project stages -->
+  
+    <stage name="gen">
+      <fcl>$genfcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/gen</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/gen</workdir>
+      <numjobs>$njob1</numjobs>
+      <datatier>generated</datatier>
+      <defname>&name;_&tag;_gen</defname>
+    </stage>
+  
+    <stage name="g4">
+      <fcl>$g4fcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/g4</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/g4</workdir>
+      <numjobs>$njob1</numjobs>
+      <datatier>simulated</datatier>
+      <defname>&name;_&tag;_g4</defname>
+    </stage>
+  
+    <stage name="detsim">
+      <fcl>$detsimfcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/detsim</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/detsim</workdir>
+      <numjobs>$njob2</numjobs>
+      <datatier>detector-simulated</datatier>
+      <defname>&name;_&tag;_detsim</defname>
+    </stage>
+  
+    <stage name="reco">
+      <fcl>$recofcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/reco</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/reco</workdir>
+      <numjobs>$njob2</numjobs>
+      <datatier>reconstructed</datatier>
+      <defname>&name;_&tag;_reco</defname>
+    </stage>
+  
+    <stage name="anatree">
+      <fcl>$anatreefcl</fcl>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/anatree</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/anatree</workdir>
+      <numjobs>$njob2</numjobs>
+      <targetsize>8000000000</targetsize>
+      <datatier>reconstructed</datatier>
+      <defname>&name;_&tag;</defname>
+    </stage>
+  
+    <!-- file type -->
+    <filetype>&file_type;</filetype>
+  
+    <!-- run type -->
+    <runtype>&run_type;</runtype>
+  
+  </project>
+EOF
+}
+
+function set_default_fcl { 
+  # G4
+  g4fcl=standard_g4_sbnd.fcl
+
+  # Detsim (optical + tpc).
+  detsimfcl=standard_detsim_sbnd.fcl
+
+  # Reco 
+  recofcl=standard_reco_sbnd.fcl
+
+  # Anatree 
+  anatreefcl=standard_ana_sbnd.fcl
+}
+
+
+#Parse arguments.
 
 rel=v00_07_00
 userdir=users/sbndpro
@@ -128,7 +241,7 @@ rm -f *.xml
 
 # Loop over existing generator fcl files.
 
-find $SBNDCODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
+find $SBNDCODE_DIR/fcl/gen -name \*.fcl | while read fcl
 do
   if ! echo $fcl | grep -q common; then
     newprj=`basename $fcl .fcl`
@@ -137,42 +250,7 @@ do
 
     # Make xml file.
 
-    echo "Making ${newprj}.xml"
 
-    # Generator
-
-    genfcl=`basename $fcl`
-
-    # G4
-
-    g4fcl=standard_g4_sbnd.fcl
-    if echo $newprj | grep -q dirt; then
-      g4fcl=standard_g4_dirt_sbnd.fcl
-    fi
-
-    # Detsim (optical + tpc).
-
-    detsimfcl=standard_detsim_sbnd.fcl
-    if echo $newprj | grep -q dirt; then
-      detsimfcl=standard_detsim_sbnd_tpcfilt.fcl
-      if echo $newprj | grep -q bnb; then
-        filt=5
-      else
-        filt=20
-      fi
-    fi
-
-    # Reco 2D
-
-    reco2dfcl=standard_reco_sbnd_2D.fcl
-
-    # Reco 3D
-
-    reco3dfcl=standard_reco_sbnd_3D.fcl
-
-    # Merge/Analysis
-
-    mergefcl=standard_ana_sbnd.fcl
 
     # Set number of gen/g4 events per job.
 
@@ -217,140 +295,82 @@ do
       njob1=$njob2
     fi
 
-  cat <<EOF > $newxml
-<?xml version="1.0"?>
 
-<!-- Production Project -->
 
-<!DOCTYPE project [
-<!ENTITY release "$rel">
-<!ENTITY file_type "mc">
-<!ENTITY run_type "physics">
-<!ENTITY name "$newprj">
-<!ENTITY tag "mcc1.0">
-]>
+    # Define the generator-level fcl
+    genfcl=`basename $fcl`
+    #Assume that we are going to produce this sample with the default fcls
+    makedefaultsample=true
+    #Loop over the MCCSTATEMENTs in this fcl file to figure out what alternative samples need making
+    grep "MCCSTATEMENT" $fcl | 
+    {  #being the moron I am, I forgot that a while loop uses a subshell.  I want to maybe 
+       #change the value of makedefaultsample and check it outside of the loop.  So
+       #complete hack; wrap from here to the final makedefaultsample check in braces
+       #so it is all in the same subshell.  Basically not having the braces means that
+       #makedefaultsample will evaluate to true outside of this while loop
+    while read mccstatement
+    do
+      #At time of writing, the MCCSTATEMENT should define an altnerative set of fcl files to 
+      #process this particular sample through.  Technically each MCCSTATEMENT line is a 
+      #comma separated list of fcl files and a name for the alternative project.  The first element in the 
+      #comma separated list is a pair of statements separated by white space, the second of the pair is the 
+      #name of the project.  All subsequent elements in the list are also pairs separated by white space.
+      #The first element defines which stage to change the fcl file and can have the following names: G4:
+      #DETSIM: RECO: and ANATREE:.
 
-<project name="&name;">
+      #It is also possible that one of the statement lines asks us not to make the default sample path
+      #Check for this and set the flag to false if necessary
+      if echo $mccstatement | grep -q SKIPDEFAULT; then
+        makedefaultsample=false
+        #There shouldn't be anything else useful on this line so continue to the next statement
+        continue
+      fi
 
-  <!-- Project size -->
-  <numevents>$nev</numevents>
+      #For each new MCCSTATEMENT line we should initially reset the fcl files
+      set_default_fcl
+      #Also reset the project name to that of the default sample as otherwise the new project names keep 
+      #getting appended to the previous new project name
+      newprj=`basename $fcl .fcl`
+      newxml=${newprj}.xml
 
-  <!-- Operating System -->
-  <os>SL6</os>
+      #Delimit the MCCSTATEMENT line on the commas
+      IFS=','
+      statementarray=($mccstatement)
+      unset IFS
+      for statementelement in "${statementarray[@]}"
+      do
+        #The statementelement should be a string pair basically with a key and a value.  This time
+        #separated by whitespace
+        pair=($statementelement)
+        key=${pair[0]}
+        value=${pair[1]}
+        if echo $key | grep -q MCCSTATEMENT; then
+          newprj="${newprj}_${value}"
+          newxml=${newprj}.xml
+        elif echo $key | grep -q G4; then
+          g4fcl=$value
+        elif echo $key | grep -q DETSIM; then
+          detsimfcl=$value
+        elif echo $key | grep -q RECO; then
+          recofcl=$value
+        elif echo $key | grep -q ANATREE; then
+          anatreefcl=$value
+        else echo "ISSUE WITH MCCSTATEMENT IN $newprj.  CAN NOT FIND THE SET STATEMENTS (MCCSTATEMENT G4 DETSIM RECO OR ANATREE)"
+        fi
+      done
+      #make an XML file for each MCCSTATEMENT line
+      print_xml_to_file
 
-  <!-- Batch resources -->
-  <resource>DEDICATED,OPPORTUNISTIC</resource>
+    done
+    #if we still want to make the default file then make the XML
+    if [ "$makedefaultsample"=true ] ; then
 
-  <!-- Larsoft information -->
-  <larsoft>
-    <tag>&release;</tag>
-    <qual>${qual}</qual>
-EOF
-  if [ x$local != x ]; then
-    echo "local=$local"
-    echo "    <local>${local}</local>" >> $newxml
-  fi
-  cat <<EOF >> $newxml
-  </larsoft>
-
-  <!-- Project stages -->
-
-  <stage name="gen">
-    <fcl>$genfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/gen/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/gen/&name;</workdir>
-    <numjobs>$njob1</numjobs>
-    <datatier>generated</datatier>
-    <defname>&name;_&tag;_gen</defname>
-  </stage>
-
-  <stage name="g4">
-    <fcl>$g4fcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/g4/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/g4/&name;</workdir>
-    <numjobs>$njob1</numjobs>
-    <datatier>simulated</datatier>
-    <defname>&name;_&tag;_g4</defname>
-  </stage>
-
-EOF
-  if [ x$detsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="detsim">
-    <fcl>$detsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/detsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/detsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>detector-simulated</datatier>
-    <defname>&name;_&tag;_detsim</defname>
-  </stage>
-
-EOF
-  fi
-  if [ x$optsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="optsim">
-    <fcl>$optsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/optsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>optical-simulated</datatier>
-    <defname>&name;_&tag;_optsim</defname>
-  </stage>
-
-EOF
-  fi
-  if [ x$tpcsimfcl != x ]; then
-    cat <<EOF >> $newxml
-  <stage name="tpcsim">
-    <fcl>$tpcsimfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/tpcsim/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>tpc-simulated</datatier>
-    <defname>&name;_&tag;_tpcsim</defname>
-  </stage>
-
-EOF
-  fi
-  cat <<EOF >> $newxml
-  <stage name="reco2D">
-    <fcl>$reco2dfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco2D/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-2d</datatier>
-    <defname>&name;_&tag;_reco2D</defname>
-  </stage>
-
-  <stage name="reco3D">
-    <fcl>$reco3dfcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/reco3D/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <datatier>reconstructed-3d</datatier>
-    <defname>&name;_&tag;_reco3D</defname>
-  </stage>
-
-  <stage name="mergeana">
-    <fcl>$mergefcl</fcl>
-    <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</outdir>
-    <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/mergeana/&name;</workdir>
-    <numjobs>$njob2</numjobs>
-    <targetsize>8000000000</targetsize>
-    <datatier>reconstructed-3d</datatier>
-    <defname>&name;_&tag;</defname>
-  </stage>
-
-  <!-- file type -->
-  <filetype>&file_type;</filetype>
-
-  <!-- run type -->
-  <runtype>&run_type;</runtype>
-
-</project>
-EOF
-
+      newprj=`basename $fcl .fcl` #reset the newprj back to the default project
+      newxml=${newprj}.xml
+      set_default_fcl
+      print_xml_to_file
+    fi
+    } #while loop subshell
   fi
 
 done
