@@ -92,6 +92,17 @@
     <beampos> 1.3, 0, -110 </beampos>
     <upstreamz>  -110.  </upstreamz>
   </param_set>
+
+  <param_set name="configC-v1">
+    <!-- Basically the same as configB but uses a HUGE flux window pressed up against the TPC front face -->
+    <using_param_set> configB-v1 </using_param_set>
+    <window>
+      <point coord="det">  -38.7, -40,  0 </point>
+      <point coord="det">  -38.7,  40,  0 </point>
+      <point coord="det">   41.3, -40,  0 </point>
+    </window>
+    <upstreamz>  0.  </upstreamz>
+  </param_set>
 </gnumi_config>
 
 
