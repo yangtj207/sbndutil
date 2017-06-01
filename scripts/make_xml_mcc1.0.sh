@@ -241,7 +241,7 @@ rm -f *.xml
 
 # Loop over existing generator fcl files.
 
-find $SBNDCODE_DIR/fcl/gen -name \*.fcl | while read fcl
+find $SBNDCODE_DIR/source/fcl/gen -name \*.fcl | while read fcl
 do
   if ! echo $fcl | grep -q common; then
     newprj=`basename $fcl .fcl`
