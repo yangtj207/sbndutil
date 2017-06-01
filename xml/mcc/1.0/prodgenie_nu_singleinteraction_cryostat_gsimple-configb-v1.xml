@@ -13,7 +13,7 @@
   <project name="&name;">
   
     <!-- Project size -->
-    <numevents>100000</numevents>
+    <numevents>1000000</numevents>
   
     <!-- Operating System -->
     <os>SL6</os>
@@ -33,7 +33,7 @@
       <fcl>prodgenie_nu_singleinteraction_cryostat_gsimple-configb-v1.fcl</fcl>
       <outdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/&name;/gen</outdir>
       <workdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/work/&name;/gen</workdir>
-      <numjobs>1000</numjobs>
+      <numjobs>10000</numjobs>
       <datatier>generated</datatier>
       <defname>&name;_&tag;_gen</defname>
     </stage>
@@ -42,7 +42,7 @@
       <fcl>standard_g4_sbnd.fcl</fcl>
       <outdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/&name;/g4</outdir>
       <workdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/work/&name;/g4</workdir>
-      <numjobs>1000</numjobs>
+      <numjobs>10000</numjobs>
       <datatier>simulated</datatier>
       <defname>&name;_&tag;_g4</defname>
     </stage>
@@ -51,7 +51,7 @@
       <fcl>standard_detsim_sbnd.fcl</fcl>
       <outdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/&name;/detsim</outdir>
       <workdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/work/&name;/detsim</workdir>
-      <numjobs>1000</numjobs>
+      <numjobs>10000</numjobs>
       <datatier>detector-simulated</datatier>
       <defname>&name;_&tag;_detsim</defname>
     </stage>
@@ -60,7 +60,7 @@
       <fcl>standard_reco_sbnd.fcl</fcl>
       <outdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/&name;/reco</outdir>
       <workdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/work/&name;/reco</workdir>
-      <numjobs>1000</numjobs>
+      <numjobs>10000</numjobs>
       <datatier>reconstructed</datatier>
       <defname>&name;_&tag;_reco</defname>
     </stage>
@@ -69,7 +69,7 @@
       <fcl>standard_ana_sbnd.fcl</fcl>
       <outdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/&name;/anatree</outdir>
       <workdir>/pnfs/sbnd/persistent/users/sbndpro/&release;/work/&name;/anatree</workdir>
-      <numjobs>1000</numjobs>
+      <numjobs>10000</numjobs>
       <targetsize>8000000000</targetsize>
       <datatier>reconstructed</datatier>
       <defname>&name;_&tag;</defname>
