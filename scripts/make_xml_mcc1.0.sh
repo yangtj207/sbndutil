@@ -33,96 +33,96 @@ function print_xml_to_file {
   echo "Making ${newxml}"
 
   cat <<EOF > $newxml
-  <?xml version="1.0"?>
-  
-  <!-- Production Project -->
-  
-  <!DOCTYPE project [
-  <!ENTITY release "$rel">
-  <!ENTITY file_type "mc">
-  <!ENTITY run_type "physics">
-  <!ENTITY name "$newprj">
-  <!ENTITY tag "mcc1.0">
-  ]>
-  
-  <project name="&name;">
-  
-    <!-- Project size -->
-    <numevents>$nev</numevents>
-  
-    <!-- Operating System -->
-    <os>SL6</os>
-  
-    <!-- Batch resources -->
-    <resource>DEDICATED,OPPORTUNISTIC</resource>
-  
-    <!-- Larsoft information -->
-    <larsoft>
-      <tag>&release;</tag>
-      <qual>${qual}</qual>
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "$rel">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "$newprj">
+<!ENTITY tag "mcc1.0">
+]>
+
+<project name="&name;">
+
+  <!-- Project size -->
+  <numevents>$nev</numevents>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>${qual}</qual>
 EOF
-    if [ x$local != x ]; then
-      echo "local=$local"
-      echo "    <local>${local}</local>" >> $newxml
-    fi
+  if [ x$local != x ]; then
+    echo "local=$local"
+    echo "    <local>${local}</local>" >> $newxml
+  fi
 cat <<EOF >> $newxml
-    </larsoft>
-  
-    <!-- Project stages -->
-  
-    <stage name="gen">
-      <fcl>$genfcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/gen</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/gen</workdir>
-      <numjobs>$njob1</numjobs>
-      <datatier>generated</datatier>
-      <defname>&name;_&tag;_gen</defname>
-    </stage>
-  
-    <stage name="g4">
-      <fcl>$g4fcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/g4</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/g4</workdir>
-      <numjobs>$njob1</numjobs>
-      <datatier>simulated</datatier>
-      <defname>&name;_&tag;_g4</defname>
-    </stage>
-  
-    <stage name="detsim">
-      <fcl>$detsimfcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/detsim</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/detsim</workdir>
-      <numjobs>$njob2</numjobs>
-      <datatier>detector-simulated</datatier>
-      <defname>&name;_&tag;_detsim</defname>
-    </stage>
-  
-    <stage name="reco">
-      <fcl>$recofcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/reco</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/reco</workdir>
-      <numjobs>$njob2</numjobs>
-      <datatier>reconstructed</datatier>
-      <defname>&name;_&tag;_reco</defname>
-    </stage>
-  
-    <stage name="anatree">
-      <fcl>$anatreefcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/anatree</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/anatree</workdir>
-      <numjobs>$njob2</numjobs>
-      <targetsize>8000000000</targetsize>
-      <datatier>reconstructed</datatier>
-      <defname>&name;_&tag;</defname>
-    </stage>
-  
-    <!-- file type -->
-    <filetype>&file_type;</filetype>
-  
-    <!-- run type -->
-    <runtype>&run_type;</runtype>
-  
-  </project>
+  </larsoft>
+
+  <!-- Project stages -->
+
+  <stage name="gen">
+    <fcl>$genfcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/gen</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/gen</workdir>
+    <numjobs>$njob1</numjobs>
+    <datatier>generated</datatier>
+    <defname>&name;_&tag;_gen</defname>
+  </stage>
+
+  <stage name="g4">
+    <fcl>$g4fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/g4</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/g4</workdir>
+    <numjobs>$njob1</numjobs>
+    <datatier>simulated</datatier>
+    <defname>&name;_&tag;_g4</defname>
+  </stage>
+
+  <stage name="detsim">
+    <fcl>$detsimfcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/detsim</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/detsim</workdir>
+    <numjobs>$njob2</numjobs>
+    <datatier>detector-simulated</datatier>
+    <defname>&name;_&tag;_detsim</defname>
+  </stage>
+
+  <stage name="reco">
+    <fcl>$recofcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/reco</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/reco</workdir>
+    <numjobs>$njob2</numjobs>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_&tag;_reco</defname>
+  </stage>
+
+  <stage name="anatree">
+    <fcl>$anatreefcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/anatree</outdir>
+    <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/anatree</workdir>
+    <numjobs>$njob2</numjobs>
+    <targetsize>8000000000</targetsize>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
 EOF
 }
 
