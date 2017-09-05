@@ -72,8 +72,8 @@ cat <<EOF >> $newxml
   
     <stage name="gen">
       <fcl>$genfcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/gen</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/gen</workdir>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/gen</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/gen</workdir>
       <numjobs>$njob1</numjobs>
       <datatier>generated</datatier>
       <defname>&name;_&tag;_gen</defname>
@@ -81,8 +81,8 @@ cat <<EOF >> $newxml
   
     <stage name="g4">
       <fcl>$g4fcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/g4</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/g4</workdir>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/g4</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/g4</workdir>
       <numjobs>$njob1</numjobs>
       <datatier>simulated</datatier>
       <defname>&name;_&tag;_g4</defname>
@@ -90,8 +90,8 @@ cat <<EOF >> $newxml
   
     <stage name="detsim">
       <fcl>$detsimfcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/detsim</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/detsim</workdir>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/detsim</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/detsim</workdir>
       <numjobs>$njob2</numjobs>
       <datatier>detector-simulated</datatier>
       <defname>&name;_&tag;_detsim</defname>
@@ -99,8 +99,8 @@ cat <<EOF >> $newxml
   
     <stage name="reco">
       <fcl>$recofcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/reco</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/reco</workdir>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/reco</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/reco</workdir>
       <numjobs>$njob2</numjobs>
       <datatier>reconstructed</datatier>
       <defname>&name;_&tag;_reco</defname>
@@ -108,8 +108,8 @@ cat <<EOF >> $newxml
   
     <stage name="anatree">
       <fcl>$anatreefcl</fcl>
-      <outdir>/pnfs/sbnd/persistent/${userdir}/&release;/&name;/anatree</outdir>
-      <workdir>/pnfs/sbnd/persistent/${userdir}/&release;/work/&name;/anatree</workdir>
+      <outdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/&name;/anatree</outdir>
+      <workdir>/pnfs/sbnd/persistent/${userdir}/&tag;/&release;/work/&name;/anatree</workdir>
       <numjobs>$njob2</numjobs>
       <targetsize>8000000000</targetsize>
       <datatier>reconstructed</datatier>
@@ -144,7 +144,7 @@ function set_default_fcl {
 #Parse arguments.
 
 rel=v00_07_00
-userdir=users/sbndpro
+userdir=sbndpro
 qual=e9:prof
 userbase=$userdir
 nevarg=0
