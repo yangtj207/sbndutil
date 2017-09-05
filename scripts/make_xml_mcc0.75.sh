@@ -1,9 +1,9 @@
 #! /bin/bash
 #----------------------------------------------------------------------
 #
-# Name: make_xml_mcc1.0.sh
+# Name: make_xml_mcc0.75.sh
 #
-# Purpose: Make xml files for mcc 1.0.  This script loops over all
+# Purpose: Make xml files for mcc 0.75.  This script loops over all
 #          generator-level fcl files in the source area of the currently 
 #          setup version of sbndcode (that is, under 
 #          $SBNDCODE_DIR/source/fcl/gen), and makes a corresponding xml
@@ -11,7 +11,7 @@
 #
 # Usage:
 #
-# make_xml_mcc1.0.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]
+# make_xml_mcc0.75.sh [-h|--help] [-r <release>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]
 #
 # Options:
 #
@@ -42,7 +42,7 @@ function print_xml_to_file {
   <!ENTITY file_type "mc">
   <!ENTITY run_type "physics">
   <!ENTITY name "$newprj">
-  <!ENTITY tag "mcc1.0">
+  <!ENTITY tag "mcc0.75">
   ]>
   
   <project name="&name;">
@@ -158,7 +158,7 @@ while [ $# -gt 0 ]; do
     # User directory.
 
     -h|--help )
-      echo "Usage: make_xml_mcc1.0.sh [-h|--help] [-r <release>] [-q <qual>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
+      echo "Usage: make_xml_mcc0.75.sh [-h|--help] [-r <release>] [-q <qual>] [-u|--user <user>] [--local <dir|tar>] [--nev <n>] [--nevjob <n>] [--nevgjob <n>]"
       exit
     ;;
 
