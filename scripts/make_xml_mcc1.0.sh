@@ -137,7 +137,7 @@ function set_default_fcl {
   recofcl=standard_reco_sbnd_basic.fcl
 
   # Anatree 
-  anatreefcl=standard_ana_sbnd.fcl
+  anatreefcl=standard_anatree_sbnd.fcl
 }
 
 
