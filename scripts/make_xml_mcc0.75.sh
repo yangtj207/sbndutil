@@ -134,7 +134,7 @@ function set_default_fcl {
   detsimfcl=standard_detsim_sbnd.fcl
 
   # Reco 
-  recofcl=standard_reco_sbnd.fcl
+  recofcl=standard_reco_sbnd_basic.fcl
 
   # Anatree 
   anatreefcl=standard_ana_sbnd.fcl
