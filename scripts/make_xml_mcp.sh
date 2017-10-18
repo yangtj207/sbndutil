@@ -1,9 +1,9 @@
 #! /bin/bash
 #----------------------------------------------------------------------
 #
-# Name: make_xml_mcc0.75.sh
+# Name: make_xml_mcp.sh
 #
-# Purpose: Make xml files for mcc 0.75.  This script loops over all
+# Purpose: Make xml files for a Monte Carlo Production (MCP).  This script loops over all
 #          generator-level fcl files in the source area of the currently 
 #          setup version of sbndcode (that is, under 
 #          $SBNDCODE_DIR/source/fcl/gen), and makes a corresponding xml
