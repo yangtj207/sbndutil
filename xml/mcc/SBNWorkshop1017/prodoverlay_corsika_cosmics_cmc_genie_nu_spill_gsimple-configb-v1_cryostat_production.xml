@@ -45,6 +45,7 @@
     <numjobs>400</numjobs>
     <datatier>simulated</datatier>
     <defname>&name;_&tag;_g4</defname>
+    <memory>4095</memory>
   </stage>
 
   <stage name="detsim">
@@ -54,6 +55,7 @@
     <numjobs>400</numjobs>
     <datatier>detector-simulated</datatier>
     <defname>&name;_&tag;_detsim</defname>
+    <memory>4095</memory>
   </stage>
 
   <stage name="reco">
@@ -73,6 +75,7 @@
     <targetsize>8000000000</targetsize>
     <datatier>reconstructed</datatier>
     <defname>&name;_&tag;</defname>
+    <memory>4095</memory>
   </stage>
 
   <!-- file type -->
