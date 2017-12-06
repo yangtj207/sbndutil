@@ -89,10 +89,10 @@ def get_setup_script_path():
     CVMFS_DIR="/cvmfs/oasis.opensciencegrid.org/products/"
     FERMIAPP_DIR="/grid/fermiapp/products/sbnd/"
 
-    if os.path.isfile(FERMIAPP_DIR+"setup_sbnd_strict.sh"):
-        setup_script = FERMIAPP_DIR+"setup_sbnd_strict.sh"
-    elif os.path.isfile(CVMFS_DIR+"setup_sbnd_strict.sh"):
-        setup_script = CVMFS_DIR+"setup_sbnd_strict.sh"
+    if os.path.isfile(FERMIAPP_DIR+"setup_sbnd.sh"):
+        setup_script = FERMIAPP_DIR+"setup_sbnd.sh"
+    elif os.path.isfile(CVMFS_DIR+"setup_sbnd.sh"):
+        setup_script = CVMFS_DIR+"setup_sbnd.sh"
     else:
         raise RuntimeError, "Could not find setup script at "+FERMIAPP_DIR+" or "+CVMFS_DIR
 
