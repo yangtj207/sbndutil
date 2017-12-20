@@ -2,8 +2,8 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version should be of the form vxx_yy_zz (e.g. v01_02_03)
-parent sbndutil v01_36_00
-defaultqual e14
+parent sbndutil v01_37_00
+defaultqual prof
 
 # These optional lines define the installed directories where headers,
 # libraries, and executables will be found.
@@ -42,7 +42,7 @@ table_fragment_end
 
 product          version
 art              v2_08_04
-larbatch         v01_34_03
+larbatch         v01_34_04
 
 cetbuildtools    v5_14_04  -   only_for_build
 end_product_list
@@ -50,11 +50,9 @@ end_product_list
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
-qualifier  art          larbatch  notes
-e14:debug   nu:e14:debug  -nq-  
-e14:prof    nu:e14:prof   -nq-  
-e10:debug   nu:e10:debug  -nq-  
-e10:prof    nu:e10:prof   -nq-  
+qualifier  art           larbatch  notes
+debug      nu:e14:debug  -nq-  
+prof       nu:e14:prof   -nq-  
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
