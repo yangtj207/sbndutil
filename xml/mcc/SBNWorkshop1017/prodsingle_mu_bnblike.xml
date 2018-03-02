@@ -70,7 +70,6 @@
     <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/anatree</outdir>
     <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/anatree</workdir>
     <numjobs>400</numjobs>
-    <targetsize>8000000000</targetsize>
     <datatier>reconstructed</datatier>
     <defname>&name;_&tag;</defname>
   </stage>
