@@ -18,6 +18,8 @@ sed -i "${SECONDLASTLINENO}d" $OUTPUTFILE
 
 #We need to remove the braces at the end of the file as we are going to append more information
 sed -i '$ d' $OUTPUTFILE
+#We also need to add a comma to the end of the last line now that we are going to add more line
+sed -i '$ s/$/\,/g' $OUTPUTFILE
 
 #Remove the lines that are bad
 #run_type
