@@ -118,6 +118,16 @@ while :; do
                 exit 1
             fi
             ;;
+        --tfilemdjsonname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                TFILEMDJSONNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: tfilemdjsonname requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
+#
 #        --file=?*)
 #            file=${1#*=} # Delete everything up to "=" and assign the remainder.
 #            ;;
@@ -213,6 +223,12 @@ echo "services.FileCatalogMetadataSBND.ProjectVersion: \"$MDPROJECTVERSION\"" >>
 echo "services.FileCatalogMetadataSBND.ProjectSoftware: \"$MDPROJECTSOFTWARE\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProductionName: \"$MDPRODUCTIONNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProductionType: \"$MDPRODUCTIONTYPE\"" >> $INPUTFCLNAME
+#only include the TFile metadata json production if the name of the json has been specified
+if [ "$TFILEMDJSONNAME" ]; then
+  echo "services.TFileMetadataSBND: @local::sbnd_file_catalog_tfile" >> $INPUTFCLNAME
+  echo "services.TFileMetadataSBND.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
+  echo "services.TFileMetadataSBND.GenerateTFileMetadata: true" >> $INPUTFCLNAME
+fi
 
 
 
