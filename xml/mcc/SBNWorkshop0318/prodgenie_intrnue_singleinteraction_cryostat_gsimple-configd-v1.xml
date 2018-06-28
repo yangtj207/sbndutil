@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY release "v06_70_01_01_SBNWorkshop0318">
+<!ENTITY file_type "mc">
+<!ENTITY run_type "physics">
+<!ENTITY name "prodgenie_intrnue_singleinteraction_cryostat_gsimple-configd-v1">
+<!ENTITY tag "SBNWorkshop0318">
+]>
+
+<project name="&name;">
+
+  <!-- Project size -->
+  <numevents>50000</numevents>
+
+  <!-- Operating System -->
+  <os>SL6</os>
+
+  <!-- Batch resources -->
+  <resource>DEDICATED,OPPORTUNISTIC</resource>
+
+  <!-- Larsoft information -->
+  <larsoft>
+    <tag>&release;</tag>
+    <qual>e15:prof</qual>
+  </larsoft>
+
+  <!-- Project stages -->
+
+  <stage name="gen">
+    <fcl>prodgenie_intrnue_singleinteraction_cryostat_gsimple-configd-v1.fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/gen</outdir>
+    <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/gen</workdir>
+    <numjobs>500</numjobs>
+    <datatier>generated</datatier>
+    <defname>&name;_&tag;_gen</defname>
+  </stage>
+
+  <stage name="g4">
+    <fcl>standard_g4_sbnd.fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/g4</outdir>
+    <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/g4</workdir>
+    <numjobs>500</numjobs>
+    <datatier>simulated</datatier>
+    <defname>&name;_&tag;_g4</defname>
+  </stage>
+
+  <stage name="detsim">
+    <fcl>standard_detsim_sbnd.fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/detsim</outdir>
+    <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/detsim</workdir>
+    <numjobs>500</numjobs>
+    <datatier>detector-simulated</datatier>
+    <defname>&name;_&tag;_detsim</defname>
+  </stage>
+
+  <stage name="reco">
+    <fcl>standard_reco_sbnd_basic.fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/reco</outdir>
+    <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/reco</workdir>
+    <numjobs>500</numjobs>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_&tag;_reco</defname>
+  </stage>
+
+  <stage name="anatree">
+    <fcl>standard_anatree_sbnd.fcl</fcl>
+    <outdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/&name;/anatree</outdir>
+    <workdir>/pnfs/sbnd/persistent/sbndpro/&tag;/&release;/work/&name;/anatree</workdir>
+    <numjobs>500</numjobs>
+    <datatier>reconstructed</datatier>
+    <defname>&name;_&tag;</defname>
+  </stage>
+
+  <!-- file type -->
+  <filetype>&file_type;</filetype>
+
+  <!-- run type -->
+  <runtype>&run_type;</runtype>
+
+</project>
