@@ -579,4 +579,3 @@ CMD="jobsub $JOBSUB_OPTS condor_lar.sh $BATCH_OPTS"
 echo $CMD
 eval $CMD
 
-#a test commit
