@@ -1,12 +1,13 @@
 #!/bin/bash
 
-#Because of the way metadata_extractor works in fife_launch, the extractor script should only take one argument which is the name of the file (not the json) to be declared
+
 #The TFile metadata creation scheme makes a json file as part of the job running.  We can't pass the name of the json to the extractor so we will need to assume a json name
-#The assumed name is thet name of the tfile with .json appended i.e. $1.json
+#The assumed json name is hist_STAGE.root.json
+#The input file has been uniquely renamed by the time this script is called so we need to use some regex magic (thanks Marc!) to reconstruct the original json name
 
 INPUTFILE="$1"
-JSONFILE="${1}.json"
-
+JSONFILE=`echo $INPUTFILE | sed -re 's/-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}//'`
+JSONFILE="${JSONFILE}.json"
 
 
 #We need to remove the braces at the end of the file as we are going to append more information
