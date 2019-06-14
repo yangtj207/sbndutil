@@ -5,6 +5,7 @@
 #After every 100 subruns, a new run is started
 export NSUBRUNSPERRUN=100
 export WORKDIR="/sbnd/app/users/dbrailsf/generated_fcls"
+export SAMDECLARE=false
 
 while :; do
     case $1 in
@@ -51,6 +52,33 @@ while :; do
                 exit 1
             fi
             ;;
+        --mdprojver)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDSBNDPROJECTVERSION="$2"
+                shift
+            else
+                echo "$0 ERROR: mdprojver requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
+        --mdprodname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDPRODUCTIONNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: mdprodname requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
+        --mdprodtype)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDPRODUCTIONTYPE="$2"
+                shift
+            else
+                echo "$0 ERROR: mdprodtype requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
 
         -v|--verbose)
             verbose=$((verbose + 1))  # Each -v adds 1 to verbosity.
@@ -80,8 +108,22 @@ if [ -z "$NFILES" ]; then
   echo "$0 ERROR: nfiles is mandatory"
   exit 2
 fi
+if [ -z "$MDSBNDPROJECTVERSION" ]; then
+  echo "$0 ERROR: mdprojver is mandatory"
+  exit 2
+fi
+if [ -z "$MDPRODUCTIONNAME" ]; then
+  echo "$0 ERROR: mdprodname is mandatory"
+  exit 2
+fi
+if [ -z "$MDPRODUCTIONTYPE" ]; then
+  echo "$0 ERROR: mdprodtype is mandatory"
+  exit 2
+fi
+
 
 #make the output direcrory
+OUTDIR=$OUTDIR/$MDPRODUCTIONTYPE/$MDPRODUCTIONNAME/$MDSBNDPROJECTVERSION/${FCL%.*}
 mkdir -p $OUTDIR
 mkdir -p $WORKDIR
 
@@ -122,14 +164,26 @@ do
   echo -e "#include \"$FCL\"\n" \
           "source.firstRun: $RUNNUMBER\n" \
           "source.firstSubRun: $SUBRUNNUMBER" >> $WORKDIR/$OUTFCL
+  #make the fcl have a unique name (needed for SAM)
   ifdh addOutputFile $WORKDIR/$OUTFCL
   ifdh renameOutput unique
-  UNIQUEOUTFCL=`find $WORKDIR -name ${OUTFCL%.*}*`
+  #Bit annoying but we now need to find the fcl file again as ifdh doesn't tell us what the unique name is 
+  if [[ `find $WORKDIR -name ${OUTFCL%.*}*.fcl | wc -l` -ne 1 ]]
+  then
+    echo "Found incorrect number of matching fcl files for pattern: $OUTFCL"
+    find $WORKDIR -name ${OUTFCL%.*}*.fcl
+    echo "Exiting"
+    exit 3
+  fi
+  # OK so it looks like there it exactly one pattern match, so assume that is the correct one
+  UNIQUEOUTFCL=`find $WORKDIR -name ${OUTFCL%.*}*.fcl`
   UNIQUEOUTFCL=`basename $UNIQUEOUTFCL`
+  #Copy the fcl to the output directory (most likely dcache)
   ifdh copyBackOutput $OUTDIR
+  #Clear up
   ifdh cleanup
 
-echo $name
+#echo $name
 
   #Now make a json
   echo -e "
@@ -139,10 +193,10 @@ echo $name
       \"fcl.name\": \"$FCL\",
       \"sbnd_project.name\": \"${FCL%.*}\",
       \"sbnd_project.stage\": \"fcl\",
-      \"sbnd_project.version\": \"v06_70_01_01_SBNWorkshop0318\",
+      \"sbnd_project.version\": \"$MDSBNDPROJECTVERSION\",
       \"sbnd_project.software\": \"sbndcode\",
-      \"production.name\": \"SBNWorkshop0318\",
-      \"production.type\": \"workshop\",
+      \"production.name\": \"$MDPRODUCTIONNAME\",
+      \"production.type\": \"$MDPRODUCTIONTYPE\",
       \"data_tier\": \"initial-fcl\",
       \"file_format\": \"fcl\",
       \"start_time\": \"`date +"%FT%T"`\",
@@ -159,9 +213,14 @@ echo $name
     
   }
   " >> $WORKDIR/${UNIQUEOUTFCL}.json
+  if [ "$SAMDECLARE" = true ];
+  then
+    echo "Declaring ${UNIQUEOUTFCL} to SAM"
+    samweb -e sbnd declare-file ${WORKDIR}/${UNIQUEOUTFCL}.json
+    samweb -e sbnd add-file-location ${UNIQUEOUTFCL} $OUTDIR
+  fi
   let "NPROCESSEDFILES++"
 done
-  echo $name
 
 ##Calculate how much to increment the run by
 #RUNINCREMENT=`python -c "print $SUBRUNCANDIDATE//$NSUBRUNSPERRUN"`
