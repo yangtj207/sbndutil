@@ -143,7 +143,7 @@ echo $name
       \"sbnd_project.software\": \"sbndcode\",
       \"production.name\": \"SBNWorkshop0318\",
       \"production.type\": \"workshop\",
-      \"data_tier\": \"fcl\",
+      \"data_tier\": \"initial-fcl\",
       \"file_format\": \"fcl\",
       \"start_time\": \"`date +"%FT%T"`\",
       \"end_time\": \"`date +"%FT%T"`\",
