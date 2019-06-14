@@ -200,7 +200,7 @@ do
   {
       \"file_type\": \"mc\",
       \"group\": \"sbnd\",
-      \"fcl.name\": \"$FCL\",
+      \"fcl.name\": \"$UNIQUEOUTFCL\",
       \"sbnd_project.name\": \"${FCL%.*}\",
       \"sbnd_project.stage\": \"fcl\",
       \"sbnd_project.version\": \"$MDSBNDPROJECTVERSION\",
@@ -231,6 +231,17 @@ do
   fi
   let "NPROCESSEDFILES++"
 done
+
+
+if [ "$SAMDECLARE"=true ];
+then
+  echo "Making SAM dataset"
+  #Need to store the chopped up FCL name in a var as samweb has trouble parsing the %
+  TRUNCFCL=${FCL%.*}
+  samweb -e sbnd create-definition ${MDPRODUCTIONTYPE}_${MDPRODUCTIONNAME}_${FCL%.*}_initialfcl_sbnd "file_name like ${TRUNCFCL}%.fcl and sbnd_project.version $MDSBNDPROJECTVERSION and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME"
+
+  samweb -e sbnd create-definition ${MDPRODUCTIONTYPE}_${MDPRODUCTIONNAME}_${FCL%.*}_initialfcl_sbnd "file_name like ${TRUNCFCL}%.fcl and sbnd_project.version $MDSBNDPROJECTVERSION and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME"
+fi
 
 ##Calculate how much to increment the run by
 #RUNINCREMENT=`python -c "print $SUBRUNCANDIDATE//$NSUBRUNSPERRUN"`
