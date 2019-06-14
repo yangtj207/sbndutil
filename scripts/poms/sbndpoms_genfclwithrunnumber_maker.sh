@@ -121,9 +121,19 @@ if [ -z "$MDPRODUCTIONTYPE" ]; then
   exit 2
 fi
 
-
-#make the output direcrory
+echo "Running with the following settings:"
+echo "  fcl name: $FCL"
+echo "  outdir: $OUTDIR (note this will be appended with additional directory names!)"
+echo "  workdir: $WORKDIR"
+echo "  nfiles: $NFILES"
+echo "  sbnd project version: $MDSBNDPROJECTVERSION"
+echo "  production name: $MDPRODUCTIONNAME"
+echo "  production type: $MDPRODUCTIONTYPE"
+echo "  Declare to SAM: $SAMDECLARE"
+#Update the output path
 OUTDIR=$OUTDIR/$MDPRODUCTIONTYPE/$MDPRODUCTIONNAME/$MDSBNDPROJECTVERSION/${FCL%.*}
+echo "The full output path is: $OUTDIR"
+#make the directories
 mkdir -p $OUTDIR
 mkdir -p $WORKDIR
 
