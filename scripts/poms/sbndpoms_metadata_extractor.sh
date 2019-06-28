@@ -49,14 +49,14 @@ APPNAME=${APPNAMEARRAY[1]}
 #Remove the comma if there is one
 APPNAME=`echo ${APPNAME} | sed 's/,//g'`
 #Do the same for application family
-APPFAMILY=`grep "applicationFamily" $OUTPUTFILE`
-sed -i '/applicationFamily/d' $OUTPUTFILE
+APPFAMILY=`grep "application.family" $OUTPUTFILE`
+sed -i '/application.family/d' $OUTPUTFILE
 FS=\: read -a APPFAMILYARRAY <<<"$APPFAMILY"
 APPFAMILY=${APPFAMILYARRAY[1]}
 APPFAMILY=`echo ${APPFAMILY} | sed 's/,//g'`
 #and the app version
-APPVERSION=`grep "applicationVersion" $OUTPUTFILE`
-sed -i '/applicationVersion/d' $OUTPUTFILE
+APPVERSION=`grep "application.version" $OUTPUTFILE`
+sed -i '/application.version/d' $OUTPUTFILE
 FS=\: read -a APPVERSIONARRAY <<<"$APPVERSION"
 APPVERSION=${APPVERSIONARRAY[1]}
 APPVERSION=`echo ${APPVERSION} | sed 's/,//g'`
