@@ -79,6 +79,15 @@ while :; do
                 exit 1
             fi
             ;;
+        --mdstagename)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDSTAGENAME="$2"
+                shift
+            else
+                echo "$0 ERROR: mdstagename requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
 
         -v|--verbose)
             verbose=$((verbose + 1))  # Each -v adds 1 to verbosity.
@@ -120,6 +129,11 @@ if [ -z "$MDPRODUCTIONTYPE" ]; then
   echo "$0 ERROR: mdprodtype is mandatory"
   exit 2
 fi
+if [ -z "$MDSTAGENAME" ]; then
+  echo "$0 ERROR: mdstagename is mandatory"
+  exit 2
+fi
+
 
 echo "Running with the following settings:"
 echo "  fcl name: $FCL"
@@ -129,6 +143,7 @@ echo "  nfiles: $NFILES"
 echo "  sbnd project version: $MDSBNDPROJECTVERSION"
 echo "  production name: $MDPRODUCTIONNAME"
 echo "  production type: $MDPRODUCTIONTYPE"
+echo "  stage name: $MDSTAGENAME"
 echo "  Declare to SAM: $SAMDECLARE"
 #Update the output path
 OUTDIR=$OUTDIR/$MDPRODUCTIONTYPE/$MDPRODUCTIONNAME/$MDSBNDPROJECTVERSION/${FCL%.*}
@@ -174,6 +189,10 @@ do
   echo -e "#include \"$FCL\"\n" \
           "source.firstRun: $RUNNUMBER\n" \
           "source.firstSubRun: $SUBRUNNUMBER" >> $WORKDIR/$OUTFCL
+  #Append all of the other metadata needed for the job
+  sbndpoms_metadata_injector.sh --inputfclname ${WORKDIR}/${OUTFCL} --mdfclname ${FCL} --mdprojectname ${FCL%.*} --mdprojectstage $MDSTAGENAME --mdprojectversion ${MDSBNDPROJECTVERSION} --mdprojectsoftware sbndcode --mdproductionname ${MDPRODUCTIONNAME} --mdproductiontype ${MDPRODUCTIONTYPE} --mdappversion ${MDSBNDPROJECTVERSION} --mdfiletype mc --mdappfamily art --mdruntype physics --tfilemdjsonname hist_${MDSTAGENAME}.root.json 
+
+
   #make the fcl have a unique name (needed for SAM)
   ifdh addOutputFile $WORKDIR/$OUTFCL
   ifdh renameOutput unique
@@ -233,7 +252,7 @@ do
 done
 
 
-if [ "$SAMDECLARE"=true ];
+if [ "$SAMDECLARE" = true ];
 then
   echo "Making SAM dataset"
   #Need to store the chopped up FCL name in a var as samweb has trouble parsing the %
