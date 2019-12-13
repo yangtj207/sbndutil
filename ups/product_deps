@@ -1,8 +1,8 @@
-# This @product_deps@ file defines dependencies for this package. 
+# This @product_deps@ file defines dependencies for this package.
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version should be of the form vxx_yy_zz (e.g. v01_02_03)
-parent sbndutil v08_37_00
+parent sbndutil v08_38_00
 defaultqual e17
 
 # These optional lines define the installed directories where headers,
@@ -20,8 +20,8 @@ defaultqual e17
 # fcldir  product_dir  fcl
 # libdir  fq_dir       lib
 # bindir  fq_dir       bin
-# gdmldir -  
-# fwdir   -  
+# gdmldir -
+# fwdir   -
 #
 incdir  -
 fcldir  -
@@ -42,22 +42,30 @@ table_fragment_end
 
 product          version
 art              v3_03_01
-larbatch         v01_51_11
+larbatch         v01_51_12
 cetbuildtools    v7_14_00  -   only_for_build
 end_product_list
 
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
-# Make a table by adding columns before "notes". 
+# Make a table by adding columns before "notes".
 qualifier      art           larbatch  notes
-e17:py3:debug  e17:py3:debug -nq-  
-e17:py3:prof   e17:py3:prof  -nq-  
-c2:py3:debug   c2:py3:debug  -nq-  
-c2:py3:prof    c2:py3:prof   -nq-  
-e17:debug      e17:debug     -nq-  
-e17:prof       e17:prof      -nq-  
-c2:debug       c2:debug      -nq-  
-c2:prof        c2:prof       -nq-  
+e19:py3:debug  e19:py3:debug -nq-
+e19:py3:prof   e19:py3:prof  -nq-
+e19:debug      e19:debug     -nq-
+e19:prof       e19:prof      -nq-
+e17:py3:debug  e17:py3:debug -nq-
+e17:py3:prof   e17:py3:prof  -nq-
+e17:debug      e17:debug     -nq-
+e17:prof       e17:prof      -nq-
+c7:py3:debug   c7:py3:debug  -nq-
+c7:py3:prof    c7:py3:prof   -nq-
+c7:debug       c7:debug      -nq-
+c7:prof        c7:prof       -nq-
+c2:py3:debug   c2:py3:debug  -nq-
+c2:py3:prof    c2:py3:prof   -nq-
+c2:debug       c2:debug      -nq-
+c2:prof        c2:prof       -nq-
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
