@@ -109,10 +109,10 @@ def getmetadata(inputfile):
 			md['ub_project.name'] = md['fcl.name'].split(".fcl")[0]
 	else:
 		if PName == False:
-			if md.has_key('parents'):
+			if 'parents' in md:
 				parent = md['parents'][0]['file_name']
 				mdparent = samweb.getMetadata(parent)
-				if mdparent.has_key('ub_project.name'):
+				if 'ub_project.name' in mdparent:
 					md['ub_project.name'] = mdparent['ub_project.name']
 
 	return md
@@ -121,5 +121,5 @@ if __name__ == "__main__":
 	md = getmetadata(str(sys.argv[1]))
 	#print md	
 	mdtext = samweb_cli.json.dumps(md, sys.stdout, indent=2, sort_keys=True)
-	print mdtext
+	print(mdtext)
 	sys.exit(0)	
