@@ -10,6 +10,8 @@
 # Modified: 10-Jul-2017 T. Brooks (tbrooks@fnal.gov) - now works with
 #           LArSoft v06
 #
+# Modified: 17-Feb-2020 I. de Icaza Astiz (icaza@fnal.gov)
+#           Python3 compliant and Python2 backwards compatible.
 # ----------------------------------------------------------------------
 
 import os
