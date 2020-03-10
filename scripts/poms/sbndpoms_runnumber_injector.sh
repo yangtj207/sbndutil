@@ -59,11 +59,11 @@ DEFAULTRUN=${DEFAULTRUNARRAY[1]}
 #Get the subrun candidate number.  We will need to do some modulo arithmetic to work out the actual run and subrun numbers
 let "SUBRUNCANDIDATE= $PROCESS +1"
 #Calculate how much to increment the run by
-RUNINCREMENT=`python -c "print $SUBRUNCANDIDATE//$NSUBRUNSPERRUN"`
+RUNINCREMENT=$((SUBRUNCANDIDATE/NSUBRUNSPERRUN))
 #Calculate the run number
 let "RUNNUMBER= $DEFAULTRUN + $RUNINCREMENT"
 #Now the subrun
-SUBRUNNUMBER=`python -c "print $SUBRUNCANDIDATE % $NSUBRUNSPERRUN"`
+SUBRUNNUMBER=$((SUBRUNCANDIDATE%NSUBRUNSPERRUN))
 echo "#Metadata injection by $0" >> $FCL
 echo "source.firstRun: $RUNNUMBER" >> $FCL
 echo "source.firstSubRun: $SUBRUNNUMBER" >> $FCL

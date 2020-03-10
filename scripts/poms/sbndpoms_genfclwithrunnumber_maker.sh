@@ -170,9 +170,9 @@ while [[ $NPROCESSEDFILES -lt $NFILES ]]
 do
 #Do arithmetic to modulo-ise the run number and subrun number whilst making sure subrun always starts at 1
   let "SUBRUNCANDIDATE++"
-  RUNINCREMENT=`python -c "print $SUBRUNCANDIDATE//$NSUBRUNSPERRUN"`
+  RUNINCREMENT=$((SUBRUNCANDIDATE/NSUBRUNSPERRUN))
   let "RUNNUMBER= $DEFAULTRUN + $RUNINCREMENT"
-  SUBRUNNUMBER=`python -c "print $SUBRUNCANDIDATE % $NSUBRUNSPERRUN"`
+  SUBRUNNUMBER=$((SUBRUNCANDIDATE%NSUBRUNSPERRUN))
 #Never let subrun be 0
   if [[ $SUBRUNNUMBER -eq 0 ]]
   then
