@@ -44,7 +44,7 @@ product          version
 art              v3_05_01
 larbatch         v01_53_01
 jobsub_client        -     -   optional
-cetbuildtools    v7_15_01  -   only_for_build
+cetbuildtools    v7_17_01  -   only_for_build
 end_product_list
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
