@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version should be of the form vxx_yy_zz (e.g. v01_02_03)
-parent sbndutil v09_06_00_01
+parent sbndutil v09_07_00
 defaultqual e19
 
 # These optional lines define the installed directories where headers,
@@ -42,9 +42,9 @@ table_fragment_end
 
 product          version
 art              v3_05_01
-larbatch         v01_52_02
+larbatch         v01_53_01
 jobsub_client        -     -   optional
-cetbuildtools    v7_15_01  -   only_for_build
+cetbuildtools    v7_17_01  -   only_for_build
 end_product_list
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
