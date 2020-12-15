@@ -28,6 +28,7 @@ fcldir  -
 libdir  -
 bindir  product_dir    bin
 
+
 # table fragment to set various environment variables.
 table_fragment_begin
     #envSet(GROUP, sbnd)
