@@ -42,7 +42,7 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-art              v3_05_01
+art              v3_06_03
 larbatch         v01_54_01
 jobsub_client        -     -   optional
 cetbuildtools    v7_17_01  -   only_for_build
@@ -51,6 +51,8 @@ end_product_list
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes".
 qualifier      art           larbatch     jobsub_client    notes
+e20:debug      e20:debug     -nq-	  -nq-
+e20:prof       e20:prof      -nq-	  -nq-
 e19:debug      e19:debug     -nq-	  -nq-
 e19:prof       e19:prof      -nq-	  -nq-
 c7:debug       c7:debug      -nq-	  -nq-
