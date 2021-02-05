@@ -13,20 +13,14 @@
 # ======================================================================
 
 
-# use cmake 3.12 or later
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.12...3.18 FATAL_ERROR)
 
-project(sbndutil)
+project(sbndutil LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-SET ( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
-IF (NOT CETBUILDTOOLS_VERSION)
-    MESSAGE (FATAL_ERROR "ERROR: setup cetbuildtools to get the cmake modules")
-ENDIF()
+find_package(cetbuildtools REQUIRED)
 
-set(CMAKE_MODULE_PATH $ENV{ART_DIR}/Modules
-		      $ENV{CETBUILDTOOLS_DIR}/Modules
-		      ${CMAKE_MODULE_PATH})
+list(APPEND CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -45,7 +39,6 @@ cet_report_compiler_flags()
 # these are minimum required versions, not the actual product versions
 find_ups_product( art v1_08_00 )
 find_ups_product(art_root_io)
-find_ups_product( cetbuildtools v3_07_00 )
 
 
 
