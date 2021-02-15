@@ -190,13 +190,13 @@ do
           "source.firstRun: $RUNNUMBER\n" \
           "source.firstSubRun: $SUBRUNNUMBER" >> $WORKDIR/$OUTFCL
   #Append all of the other metadata needed for the job
-  sbndpoms_metadata_injector.sh --inputfclname ${WORKDIR}/${OUTFCL} --mdfclname ${FCL} --mdprojectname ${FCL%.*} --mdprojectstage $MDSTAGENAME --mdprojectversion ${MDSBNDPROJECTVERSION} --mdprojectsoftware sbndcode --mdproductionname ${MDPRODUCTIONNAME} --mdproductiontype ${MDPRODUCTIONTYPE} --mdappversion ${MDSBNDPROJECTVERSION} --mdfiletype mc --mdappfamily art --mdruntype physics --tfilemdjsonname hist_${MDSTAGENAME}.root.json 
+  sbndpoms_metadata_injector.sh --inputfclname ${WORKDIR}/${OUTFCL} --mdfclname ${FCL} --mdprojectname ${FCL%.*} --mdprojectstage $MDSTAGENAME --mdprojectversion ${MDSBNDPROJECTVERSION} --mdprojectsoftware sbndcode --mdproductionname ${MDPRODUCTIONNAME} --mdproductiontype ${MDPRODUCTIONTYPE} --mdappversion ${MDSBNDPROJECTVERSION} --mdfiletype mc --mdappfamily art --mdruntype physics --tfilemdjsonname hist_${MDSTAGENAME}.root.json --mdgroupname sbnd
 
 
   #make the fcl have a unique name (needed for SAM)
   ifdh addOutputFile $WORKDIR/$OUTFCL
   ifdh renameOutput unique
-  #Bit annoying but we now need to find the fcl file again as ifdh doesn't tell us what the unique name is 
+  #Bit annoying but we now need to find the fcl file again as ifdh doesn't tell us what the unique name is
   if [[ `find $WORKDIR -name ${OUTFCL%.*}*.fcl | wc -l` -ne 1 ]]
   then
     echo "Found incorrect number of matching fcl files for pattern: $OUTFCL"
@@ -237,9 +237,9 @@ do
   \"group\": \"sbnd\",
     \"file_name\": \"$UNIQUEOUTFCL\",
     \"file_size\": \"`wc -c < $WORKDIR/$UNIQUEOUTFCL`\",
-    \"checksum\": 
+    \"checksum\":
       `ifdh checksum $WORKDIR/$UNIQUEOUTFCL`
-    
+
   }
   " >> $WORKDIR/${UNIQUEOUTFCL}.json
   if [ "$SAMDECLARE" = true ];

@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 #Take in all of the arguments
 while :; do
     case $1 in
@@ -52,6 +52,15 @@ while :; do
                 shift
             else
                 echo "$0 ERROR: mdruntype requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
+        --mdgroupname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDGROUPNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: mdgroupname requires a non-empty option argument."
                 exit 1
             fi
             ;;
@@ -175,6 +184,11 @@ if [ -z "$MDRUNTYPE" ]; then
   exit 2
 fi
 
+if [ -z "$MDGROUPNAME" ]; then
+  echo "$0 ERROR: mdgroupname is mandatory"
+  exit 2
+fi
+
 if [ -z "$MDFCLNAME" ]; then
   echo "$0 ERROR: mdfclname is mandatory"
   exit 2
@@ -216,6 +230,7 @@ echo "services.FileCatalogMetadata.applicationFamily: \"$MDAPPFAMILY\"" >> $INPU
 echo "services.FileCatalogMetadata.applicationVersion: \"$MDAPPVERSION\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.fileType: \"$MDFILETYPE\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.runType: \"$MDRUNTYPE\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadata.group: \"$MDGROUPNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.FCLName: \"$MDFCLNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProjectName: \"$MDPROJECTNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProjectStage: \"$MDPROJECTSTAGE\"" >> $INPUTFCLNAME
