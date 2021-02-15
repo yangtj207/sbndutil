@@ -136,6 +136,15 @@ while :; do
                 exit 1
             fi
             ;;
+        --cafname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                CAFNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: cafname requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
 #
 #        --file=?*)
 #            file=${1#*=} # Delete everything up to "=" and assign the remainder.
@@ -244,10 +253,8 @@ if [ "$TFILEMDJSONNAME" ]; then
   echo "services.TFileMetadataSBND.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
   echo "services.TFileMetadataSBND.GenerateTFileMetadata: true" >> $INPUTFCLNAME
 fi
-
-
-
-
-
-
-
+# If we want to make caf files in production, lets set the output name here also
+if [ "$CAFNAME" ]
+then
+  echo "physics.producers.mycafmaker.CAFFilename: \"$CAFNAME\"" >> $INPUTFCLNAME
+fi

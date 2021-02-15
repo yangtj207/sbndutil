@@ -237,7 +237,7 @@ do
   \"group\": \"sbnd\",
     \"file_name\": \"$UNIQUEOUTFCL\",
     \"file_size\": \"`wc -c < $WORKDIR/$UNIQUEOUTFCL`\",
-    \"checksum\":
+    \"checksum\": 
       `ifdh checksum $WORKDIR/$UNIQUEOUTFCL`
 
   }
