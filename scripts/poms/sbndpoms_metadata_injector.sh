@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 #Take in all of the arguments
 while :; do
     case $1 in
@@ -52,6 +52,15 @@ while :; do
                 shift
             else
                 echo "$0 ERROR: mdruntype requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
+        --mdgroupname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                MDGROUPNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: mdgroupname requires a non-empty option argument."
                 exit 1
             fi
             ;;
@@ -127,6 +136,15 @@ while :; do
                 exit 1
             fi
             ;;
+        --cafname)       # Takes an option argument; ensure it has been specified.
+            if [ "$2" ]; then
+                CAFNAME="$2"
+                shift
+            else
+                echo "$0 ERROR: cafname requires a non-empty option argument."
+                exit 1
+            fi
+            ;;
 #
 #        --file=?*)
 #            file=${1#*=} # Delete everything up to "=" and assign the remainder.
@@ -175,6 +193,11 @@ if [ -z "$MDRUNTYPE" ]; then
   exit 2
 fi
 
+if [ -z "$MDGROUPNAME" ]; then
+  echo "$0 ERROR: mdgroupname is mandatory"
+  exit 2
+fi
+
 if [ -z "$MDFCLNAME" ]; then
   echo "$0 ERROR: mdfclname is mandatory"
   exit 2
@@ -216,6 +239,7 @@ echo "services.FileCatalogMetadata.applicationFamily: \"$MDAPPFAMILY\"" >> $INPU
 echo "services.FileCatalogMetadata.applicationVersion: \"$MDAPPVERSION\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.fileType: \"$MDFILETYPE\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.runType: \"$MDRUNTYPE\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadata.group: \"$MDGROUPNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.FCLName: \"$MDFCLNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProjectName: \"$MDPROJECTNAME\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadataSBND.ProjectStage: \"$MDPROJECTSTAGE\"" >> $INPUTFCLNAME
@@ -229,10 +253,8 @@ if [ "$TFILEMDJSONNAME" ]; then
   echo "services.TFileMetadataSBND.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
   echo "services.TFileMetadataSBND.GenerateTFileMetadata: true" >> $INPUTFCLNAME
 fi
-
-
-
-
-
-
-
+# If we want to make caf files in production, lets set the output name here also
+if [ "$CAFNAME" ]
+then
+  echo "physics.producers.mycafmaker.CAFFilename: \"$CAFNAME\"" >> $INPUTFCLNAME
+fi
