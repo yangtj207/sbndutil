@@ -257,4 +257,6 @@ fi
 if [ "$CAFNAME" ]
 then
   echo "physics.producers.mycafmaker.CAFFilename: \"$CAFNAME\"" >> $INPUTFCLNAME
+  echo "services.TFileMetadataSBND.dataTier: \"caf\"" >> $INPUTFCLNAME
+  echo "services.TFileMetadataSBND.fileFormat: \"caf\"" >> $INPUTFCLNAME
 fi
