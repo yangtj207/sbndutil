@@ -249,7 +249,7 @@ echo "services.FileCatalogMetadataSBN.ProductionName: \"$MDPRODUCTIONNAME\"" >> 
 echo "services.FileCatalogMetadataSBN.ProductionType: \"$MDPRODUCTIONTYPE\"" >> $INPUTFCLNAME
 #only include the  metadata json production if the name of the json has been specified
 if [ "$TFILEMDJSONNAME" ]; then
-  echo "services.MetadataSBN: @local::sbnd_file_catalog" >> $INPUTFCLNAME
+  echo "services.MetadataSBN: @local::sbnd_file_catalog_sbn" >> $INPUTFCLNAME
   echo "services.MetadataSBN.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
 fi
 # If we want to make caf files in production, lets set the output name here also
