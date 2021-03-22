@@ -240,23 +240,22 @@ echo "services.FileCatalogMetadata.applicationVersion: \"$MDAPPVERSION\"" >> $IN
 echo "services.FileCatalogMetadata.fileType: \"$MDFILETYPE\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.runType: \"$MDRUNTYPE\"" >> $INPUTFCLNAME
 echo "services.FileCatalogMetadata.group: \"$MDGROUPNAME\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.FCLName: \"$MDFCLNAME\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProjectName: \"$MDPROJECTNAME\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProjectStage: \"$MDPROJECTSTAGE\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProjectVersion: \"$MDPROJECTVERSION\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProjectSoftware: \"$MDPROJECTSOFTWARE\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProductionName: \"$MDPRODUCTIONNAME\"" >> $INPUTFCLNAME
-echo "services.FileCatalogMetadataSBND.ProductionType: \"$MDPRODUCTIONTYPE\"" >> $INPUTFCLNAME
-#only include the TFile metadata json production if the name of the json has been specified
+echo "services.FileCatalogMetadataSBN.FCLName: \"$MDFCLNAME\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProjectName: \"$MDPROJECTNAME\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProjectStage: \"$MDPROJECTSTAGE\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProjectVersion: \"$MDPROJECTVERSION\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProjectSoftware: \"$MDPROJECTSOFTWARE\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProductionName: \"$MDPRODUCTIONNAME\"" >> $INPUTFCLNAME
+echo "services.FileCatalogMetadataSBN.ProductionType: \"$MDPRODUCTIONTYPE\"" >> $INPUTFCLNAME
+#only include the  metadata json production if the name of the json has been specified
 if [ "$TFILEMDJSONNAME" ]; then
-  echo "services.TFileMetadataSBND: @local::sbnd_file_catalog_tfile" >> $INPUTFCLNAME
-  echo "services.TFileMetadataSBND.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
-  echo "services.TFileMetadataSBND.GenerateTFileMetadata: true" >> $INPUTFCLNAME
+  echo "services.MetadataSBN: @local::sbnd_file_catalog" >> $INPUTFCLNAME
+  echo "services.MetadataSBN.JSONFileName: \"$TFILEMDJSONNAME\"" >> $INPUTFCLNAME
 fi
 # If we want to make caf files in production, lets set the output name here also
 if [ "$CAFNAME" ]
 then
   echo "physics.producers.mycafmaker.CAFFilename: \"$CAFNAME\"" >> $INPUTFCLNAME
-  echo "services.TFileMetadataSBND.dataTier: \"caf\"" >> $INPUTFCLNAME
-  echo "services.TFileMetadataSBND.fileFormat: \"caf\"" >> $INPUTFCLNAME
+  echo "services.MetadataSBN.dataTier: \"caf\"" >> $INPUTFCLNAME
+  echo "services.MetadataSBN.fileFormat: \"caf\"" >> $INPUTFCLNAME
 fi
