@@ -17,7 +17,7 @@ while :; do
       if [ "$2" ]
       then
         DEFNAME="$2"
-        shift
+        shift 2
       else
         echo "$0 ERROR: defname requires a non-empty option argument."
         exit 1
@@ -27,7 +27,7 @@ while :; do
       if [ "$2" ]
       then
         WORKDIR="$2"
-        shift
+        shift 2
       else
         echo "$0 ERROR: workdir requires a non-empty option argument."
         exit 1
@@ -37,7 +37,7 @@ while :; do
       if [ "$2" ]
       then
         OUTDIR="$2"
-        shift
+        shift 2
       else
         echo "$0 ERROR: outdir requires a non-empty option argument."
         exit 1
@@ -47,7 +47,7 @@ while :; do
       if [ "$2" ]
       then
         MAXSIZE="$2"
-        shift
+        shift 2
       else
         echo "$0 ERROR: size requires a non-empty option argument."
         exit 1
@@ -59,7 +59,6 @@ while :; do
       ;;
     *) break
   esac
-  shift
 done
 
 if  [ -z "$DEFNAME" ]
