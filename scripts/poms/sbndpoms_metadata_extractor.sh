@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-#The TFile metadata creation scheme makes a json file as part of the job running.  We can't pass the name of the json to the extractor so we will need to assume a json name
+#The metadata creation scheme makes a json file as part of the job running.  We can't pass the name of the json to the extractor so we will need to assume a json name
 #The assumed json name is hist_STAGE.root.json
 #The input file has been uniquely renamed by the time this script is called so we need to use some regex magic (thanks Marc!) to reconstruct the original json name
 

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Define the ouptut directoryes
+# Define the output directories
 # These will be appended with metadata info
 WORKDIR="/pnfs/sbnd/scratch/sbndpro/mcp"
 OUTDIR="/pnfs/sbnd/persistent/sbndpro/mcp"
-# Concatinate files together up to 1GB
+# Concatenate files together up to 1GB
 MAXSIZE=1000000000
 
 while :; do
@@ -137,7 +137,7 @@ prepare()
 
   if [ 0 -ne $(samweb -e sbnd list-definitions | grep "$MDPRODUCTIONDEFNAME" | wc -l) ]
   then
-    echo "SAM Defintion $MDPRODUCTIONDEFNAME already present"
+    echo "SAM Definition $MDPRODUCTIONDEFNAME already present"
     exit 3
   else
     echo "Creating SAM Defintion $MDPRODUCTIONDEFNAME"
@@ -148,10 +148,10 @@ prepare()
     FLATMDPRODUCTIONDEFNAME=$(echo "$MDPRODUCTIONDEFNAME" | sed "s/concat_caf/flat_caf/g")
     if [ 0 -ne $(samweb -e sbnd list-definitions | grep "$FLATMDPRODUCTIONDEFNAME" | wc -l) ]
     then
-      echo "SAM Defintion $FLATMDPRODUCTIONDEFNAME already present"
+      echo "SAM Definition $FLATMDPRODUCTIONDEFNAME already present"
       exit 3
     else
-      echo "Creating flat caf SAM Defintion $FLATMDPRODUCTIONDEFNAME"
+      echo "Creating flat caf SAM Definition $FLATMDPRODUCTIONDEFNAME"
     fi
   fi
 }
@@ -168,7 +168,7 @@ doConcat()
 
   echo "Creating $CONCATNAME"
 
-  # Let ROOT run it's magic
+  # Let ROOT run its magic
   concat_cafs $SLICEDEFNAME $WORKDIR/$CONCATNAME
 
   extractCAFMetadata "$CONCATFILE" > $JSONFILE
@@ -181,7 +181,7 @@ doConcat()
   # Bit annoying but we now need to find the fcl file again as ifdh doesn't tell us what the unique name is
   if [[ `find $WORKDIR -name "${CONCATNAME%.*}*.root" | wc -l` -ne 1 ]]
   then
-    echo "Found incorrect mumber of matching files for pattern: ${CONCATNAME%.*}*.root"
+    echo "Found incorrect number of matching files for pattern: ${CONCATNAME%.*}*.root"
     find $WORKDIR -name "${CONCATNAME%.*}*.root"
     echo "Exiting"
     exit 3
@@ -191,7 +191,7 @@ doConcat()
     echo "$CONCATNAME renamed to $UNIQUEOUTCONCATNAME"
   fi
 
-  # OK so it looks like there it exactly one pattern match, so assume that is the correct one
+  # OK so it looks like there is exactly one pattern match, so assume that is the correct one
   #Copy the file to the output directory (most likely dcache)
   ifdh copyBackOutput $OUTDIR
   #Clear up
@@ -222,7 +222,7 @@ doConcat()
     # Bit annoying but we now need to find the fcl file again as ifdh doesn't tell us what the unique name is
     if [[ `find $WORKDIR -name "${FLATNAME%.*}*.root" | wc -l` -ne 1 ]]
     then
-      echo "Found incorrect mumber of matching files for pattern: ${FLATNAME%.*}*.root"
+      echo "Found incorrect number of matching files for pattern: ${FLATNAME%.*}*.root"
       find $WORKDIR -name "${FLATNAME%.*}*.root"
       echo "Exiting"
       exit 3
@@ -279,7 +279,7 @@ do
   SLICENUM+=1
 done
 
-# Create a defintion with the putput files
+# Create a definition with the output files
 samweb -e sbnd create-definition $MDPRODUCTIONDEFNAME "file_name like concat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE"
 echo "Created Concat SAM defintion: $MDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $MDPRODUCTIONDEFNAME)"
 
