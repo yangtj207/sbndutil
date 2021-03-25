@@ -140,7 +140,7 @@ prepare()
     echo "SAM Definition $MDPRODUCTIONDEFNAME already present"
     exit 3
   else
-    echo "Creating SAM Defintion $MDPRODUCTIONDEFNAME"
+    echo "Creating SAM Definition $MDPRODUCTIONDEFNAME"
   fi
 
   if [ ! -z "$FLATTEN" ]
@@ -281,10 +281,10 @@ done
 
 # Create a definition with the output files
 samweb -e sbnd create-definition $MDPRODUCTIONDEFNAME "file_name like concat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE"
-echo "Created Concat SAM defintion: $MDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $MDPRODUCTIONDEFNAME)"
+echo "Created Concat SAM definition: $MDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $MDPRODUCTIONDEFNAME)"
 
 if [ ! -z "$FLATTEN" ]
 then
   samweb -e sbnd create-definition $FLATMDPRODUCTIONDEFNAME "file_name like flat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE"
-  echo "Created Flat SAM defintion: $FLATMDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $FLATMDPRODUCTIONDEFNAME)"
+  echo "Created Flat SAM definition: $FLATMDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $FLATMDPRODUCTIONDEFNAME)"
 fi
