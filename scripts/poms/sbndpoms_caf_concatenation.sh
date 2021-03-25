@@ -99,19 +99,19 @@ fi
 prepare()
 {
   # Assume that the metadata is roughly the same in all files, so take the first
-  FILENAME=$(samweb -e sbnd list-definition-files $DEFNAME | head -n 1)
+  FILENAME=$(samweb -e sbnd list-files "defname: $DEFNAME with limit 1")
   samweb -e sbnd get-metadata $FILENAME --json > base.json
 
   # Lets change "caf" to "concat_caf" for the stage and defname
-  MDPRODUCTIONDEFNAME=$(echo "$DEFNAME" | sed "s/caf/concat_caf/g")
+  MDPRODUCTIONDEFNAME=${DEFNAME/caf/concat_caf}
 
   # Now we want to set some global vars to define the ouput path
-  MDFILETYPE=$(cat base.json | grep "file_type" | cut -d\" -f4)
-  MDPRODUCTIONTYPE=$(cat base.json | grep "production\.type" | cut -d\" -f4)
-  MDPRODUCTIONNAME=$(cat base.json | grep "production\.name" | cut -d\" -f4)
-  MDSBNDPROJECTNAME=$(cat base.json | grep "sbnd_project\.name" | cut -d\" -f4)
-  MDSBNDPROJECTVERSION=$(cat base.json | grep "sbnd_project\.version" | cut -d\" -f4)
-  MDSBNDPROJECTSTAGE=$(cat base.json | grep "sbnd_project\.stage" | cut -d\" -f4)
+  MDFILETYPE=$(jq -r '."file_type"' base.json)
+  MDPRODUCTIONTYPE=$(jq -r '."production.type"' base.json)
+  MDPRODUCTIONNAME=$(jq -r '."production.name"' base.json)
+  MDSBNDPROJECTNAME=$(jq -r '."sbnd_project.name"' base.json)
+  MDSBNDPROJECTVERSION=$(jq -r '."sbnd_project.version"' base.json)
+  MDSBNDPROJECTSTAGE=$(jq -r '."sbnd_project.stage"' base.json)
 
   OUTDIR="$OUTDIR/$MDFILETYPE/$MDPRODUCTIONTYPE/$MDPRODUCTIONNAME/$MDSBNDPROJECTNAME/$MDSBNDPROJECTVERSION/$MDSBNDPROJECTSTAGE"
   WORKDIR="$WORKDIR/$MDFILETYPE/$MDPRODUCTIONTYPE/$MDPRODUCTIONNAME/$MDSBNDPROJECTNAME/$MDSBNDPROJECTVERSION/$MDSBNDPROJECTSTAGE"
@@ -135,7 +135,7 @@ prepare()
     exit 3
   fi
 
-  if [ 0 -ne $(samweb -e sbnd list-definitions | grep "$MDPRODUCTIONDEFNAME" | wc -l) ]
+  if [ $(samweb -e sbnd list-definitions | grep "$MDPRODUCTIONDEFNAME") ]
   then
     echo "SAM Definition $MDPRODUCTIONDEFNAME already present"
     exit 3
@@ -145,8 +145,8 @@ prepare()
 
   if [ ! -z "$FLATTEN" ]
   then
-    FLATMDPRODUCTIONDEFNAME=$(echo "$MDPRODUCTIONDEFNAME" | sed "s/concat_caf/flat_caf/g")
-    if [ 0 -ne $(samweb -e sbnd list-definitions | grep "$FLATMDPRODUCTIONDEFNAME" | wc -l) ]
+    FLATMDPRODUCTIONDEFNAME=${MDPRODUCTIONDEFNAME/concat_caf/flat_caf}
+    if [ $(samweb -e sbnd list-definitions | grep "$FLATMDPRODUCTIONDEFNAME") ]
     then
       echo "SAM Definition $FLATMDPRODUCTIONDEFNAME already present"
       exit 3
@@ -248,9 +248,13 @@ doConcat()
 
 prepare
 
+declare -i CONCATCOUNT=0
+declare -i SLICENUM=0
+declare -i FILECOUNTER=0
+
 # Loop over all of the files in the dataset
 DEFSIZE=$(samweb -e sbnd list-definition-files --summary $DEFNAME | grep "Total size" | tr -dc '0-9')
-FILECOUNT=$(samweb -e sbnd list-definition-files --summary $DEFNAME | grep "File count" | tr -dc '0-9')
+FILECOUNT=$(samweb -e sbnd count-definition-files $DEFNAME)
 
 # Work out the size of each file
 FILESIZE=$(( $DEFSIZE / $FILECOUNT ))
@@ -280,11 +284,11 @@ do
 done
 
 # Create a definition with the output files
-samweb -e sbnd create-definition $MDPRODUCTIONDEFNAME "file_name like concat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE"
+samweb -e sbnd create-definition $MDPRODUCTIONDEFNAME "file_name like concat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE and ischildof: ( defname: $DEFNAME ) and file_format concat_caf"
 echo "Created Concat SAM definition: $MDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $MDPRODUCTIONDEFNAME)"
 
 if [ ! -z "$FLATTEN" ]
 then
-  samweb -e sbnd create-definition $FLATMDPRODUCTIONDEFNAME "file_name like flat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE"
+  samweb -e sbnd create-definition $FLATMDPRODUCTIONDEFNAME "file_name like flat_caf_%.root and file_type $MDFILETYPE and production.type $MDPRODUCTIONTYPE and production.name $MDPRODUCTIONNAME and sbnd_project.name $MDSBNDPROJECTNAME and sbnd_project.version $MDSBNDPROJECTVERSION and sbnd_project.stage $MDSBNDPROJECTSTAGE and ischildof: ( defname: $DEFNAME ) and file_format flat_caf"
   echo "Created Flat SAM definition: $FLATMDPRODUCTIONDEFNAME: $(samweb -e sbnd list-definition-files --summary $FLATMDPRODUCTIONDEFNAME)"
 fi
