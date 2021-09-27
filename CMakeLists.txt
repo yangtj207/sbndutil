@@ -13,19 +13,18 @@
 # ======================================================================
 
 
-cmake_minimum_required (VERSION 3.12...3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-project(sbndutil LANGUAGES CXX)
+project(sbndutil VERSION 09.31.00 LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
+find_package(cetbuildtools 8.17.02 REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules)
 
 include(CetCMakeEnv)
 cet_cmake_env()
-
-set_install_root()
+set(${PROJECT_NAME}_CONFIG_OUTPUT_ROOT_DIR_INIT ${${PROJECT_NAME}_DATA_ROOT_DIR})
 
 # see the comment in sbndcode/CMakeLists.txt about the C++ standard specification
 cet_set_compiler_flags(DIAGS CAUTIOUS
