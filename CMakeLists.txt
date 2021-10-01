@@ -15,10 +15,10 @@
 
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-project(sbndutil VERSION 09.31.00 LANGUAGES CXX)
+project(sbndutil VERSION 09.32.00 LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-find_package(cetbuildtools 8.17.02 REQUIRED)
+find_package(cetbuildtools REQUIRED)
 
 list(APPEND CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules)
 
