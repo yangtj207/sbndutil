@@ -43,7 +43,7 @@ table_fragment_end
 
 product          version
 art              v3_12_00
-larbatch         v01_59_03
+larbatch         v01_59_04
 jobsub_client        -     -   optional
 cetbuildtools    v8_20_00  -   only_for_build
 end_product_list
