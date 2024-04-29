@@ -1,3 +1,13 @@
+########################################################################
+# File:        create_raw_definition_sbnd.py
+# Author:      tjyang@fnal.gov
+#
+# Script to declare SBND raw data files
+#
+# Usage: create_raw_definition_sbnd.py run_number
+#
+########################################################################
+
 #!/usr/bin/env python
 
 import sys
